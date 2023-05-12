@@ -32,20 +32,20 @@ public class CommentController {
     }
 
     /**
-     * 댓글 수정 ( PUT /comment/{commentId} )
+     * 댓글 수정 ( PUT /tour/{roadmapId}/comment/{commentId} )
      *
      */
-    @PutMapping({"/comment/{commentId}"})
+    @PutMapping({"/tour/{roadmapId}/comment/{commentId}"})
     public ResponseEntity update(@PathVariable Long commentId, @RequestBody CommentDTO.Request dto) {
         commentService.update(commentId, dto);
         return ResponseEntity.ok(commentId);
     }
 
     /**
-     * 댓글 삭제 ( DELETE /comment/{commentId} )
+     * 댓글 삭제 ( DELETE /tour/{roadmapId}/comment/{commentId} )
      *
      */
-    @DeleteMapping("/comment/{commentId}")
+    @DeleteMapping("/tour/{roadmapId}/comment/{commentId}")
     public ResponseEntity delete(@PathVariable Long commentId) {
         commentService.delete(commentId);
         return ResponseEntity.ok(commentId);
