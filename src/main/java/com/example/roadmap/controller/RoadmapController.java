@@ -30,10 +30,10 @@ public class RoadmapController {
     }
 
     /**
-     * 글 수정 ( PUT /tour/edit/{roadmapId} )
+     * 글 수정 ( PUT /tour/{roadmapId} )
      *
      */
-    @PutMapping("/tour/edit/{roadmapId}")
+    @PutMapping("/tour/{roadmapId}")
     public ResponseEntity update(@PathVariable Long roadmapId, @RequestBody RoadmapDTO.Request dto) {
         roadmapService.update(roadmapId, dto);
         return ResponseEntity.ok(roadmapId);
