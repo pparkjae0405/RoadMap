@@ -10,8 +10,13 @@ public class User {
     @Column(name = "userId")
     private long userId;
 
+    @Column(name = "nickName", nullable = false, unique = true)
+    private String nickName;
+
+    @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String major;
 
     @Column(name="serialNumber")
