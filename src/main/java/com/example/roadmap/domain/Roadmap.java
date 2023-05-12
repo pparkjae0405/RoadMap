@@ -33,11 +33,17 @@ public class Roadmap {
     private String content;
 
     /**
-     * Roadmap과 Comment는 일대다 연관관계를 가짐
+     * Roadmap은 Info와 일대다 연관관계를 가짐
      */
     // mappedBy = "roadmap" : FK는 다 쪽에서 관리
     // cascade = cascadeType.ALL : 상위 엔터티에서 하위 엔터티로 모든 작업을 전파
     // orphanRemoval = true : 부모 엔티티가 삭제되면 자식 엔티티도 삭제
+    @OneToMany(mappedBy = "roadmap", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Info> infos;
+
+    /**
+     * Roadmap과 Comment는 일대다 연관관계를 가짐
+     */
     @OneToMany(mappedBy = "roadmap", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
