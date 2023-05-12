@@ -48,6 +48,7 @@ public class RoadmapDTO {
         private Long view;
         private String title;
         private String content;
+        private List<InfoDTO.Response> infos;
         private List<CommentDTO.Response> comments;
 
         /* Entity -> Dto*/
@@ -57,6 +58,10 @@ public class RoadmapDTO {
             this.view = roadmap.getView();
             this.title = roadmap.getTitle();
             this.content = roadmap.getContent();
+            this.infos = roadmap.getInfos()
+                    .stream()
+                    .map(InfoDTO.Response::new)
+                    .collect(Collectors.toList());
             this.comments = roadmap.getComments()
                     .stream()
                     .map(CommentDTO.Response::new)
