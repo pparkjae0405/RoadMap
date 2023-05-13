@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 /**
  * 댓글 작성을 위한 Comment 테이블
@@ -15,7 +14,7 @@ import org.springframework.data.annotation.CreatedDate;
 @AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자를 만듦
 @Getter
 @Entity
-public class Comment {
+public class Comment extends BaseTime{
     /**
      * 댓글 번호(PK)
      */
@@ -25,12 +24,8 @@ public class Comment {
     private Long commentId;
 
     /**
-     * 댓글 작성 날짜, 댓글 내용
+     * 댓글 작성 날짜(BaseTime에서 상속), 댓글 내용
      */
-    @Column(nullable = false)
-    @CreatedDate
-    private String date;
-
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
