@@ -17,8 +17,7 @@ public class CommentDTO {
     @Builder
     public static class Request {
         private Long commentId;
-        private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-        private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         private String content;
         private Roadmap roadmap;
 
@@ -26,8 +25,7 @@ public class CommentDTO {
         public Comment toEntity() {
             Comment comments = Comment.builder()
                     .commentId(commentId)
-                    .createdDate(createdDate)
-                    .modifiedDate(modifiedDate)
+                    .date(date)
                     .content(content)
                     .roadmap(roadmap)
                     .build();
@@ -45,15 +43,13 @@ public class CommentDTO {
     @RequiredArgsConstructor
     public static class Response {
         private Long commentId;
-        private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-        private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         private String content;
 
         /* Entity -> Dto*/
         public Response(Comment comment) {
             this.commentId = comment.getCommentId();
-            this.createdDate = comment.getCreatedDate();
-            this.modifiedDate = comment.getModifiedDate();
+            this.date = comment.getDate();
             this.content = comment.getContent();
         }
     }
