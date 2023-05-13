@@ -3,8 +3,6 @@ package com.example.roadmap.dto;
 import com.example.roadmap.domain.Roadmap;
 import lombok.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +16,6 @@ public class RoadmapDTO {
     @Builder
     public static class Request {
         private Long roadmapId;
-        private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         private int view;
         private String title;
         private String content;
@@ -27,7 +24,6 @@ public class RoadmapDTO {
         public Roadmap toEntity() {
             Roadmap roadmap = Roadmap.builder()
                     .roadmapId(roadmapId)
-                    .date(date)
                     .view(0)
                     .title(title)
                     .content(content)
@@ -46,7 +42,7 @@ public class RoadmapDTO {
     @RequiredArgsConstructor
     public static class Response{
         private Long roadmapId;
-        private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        private String date;
         private int view;
         private String title;
         private String content;
