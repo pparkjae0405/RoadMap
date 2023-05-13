@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자를 만듦
 @Getter
 @Entity
-public class Roadmap {
+public class Roadmap extends BaseTime{
     /**
      * 글 번호(PK)
      */
@@ -27,12 +26,8 @@ public class Roadmap {
     private Long roadmapId;
 
     /**
-     * 글 작성 날짜, 조회수, 글 제목, 글 내용
+     * 글 작성 날짜(BaseTime에서 상속), 조회수, 글 제목, 글 내용
      */
-    @Column(nullable = false)
-    @CreatedDate
-    private String date;
-
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int view;
 

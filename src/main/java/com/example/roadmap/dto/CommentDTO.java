@@ -4,9 +4,6 @@ import com.example.roadmap.domain.Comment;
 import com.example.roadmap.domain.Roadmap;
 import lombok.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 public class CommentDTO {
     /**
      * 댓글의 등록과 수정을 처리할 요청(Request) 클래스
@@ -17,7 +14,6 @@ public class CommentDTO {
     @Builder
     public static class Request {
         private Long commentId;
-        private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         private String content;
         private Roadmap roadmap;
 
@@ -25,7 +21,6 @@ public class CommentDTO {
         public Comment toEntity() {
             Comment comments = Comment.builder()
                     .commentId(commentId)
-                    .date(date)
                     .content(content)
                     .roadmap(roadmap)
                     .build();
@@ -43,7 +38,7 @@ public class CommentDTO {
     @RequiredArgsConstructor
     public static class Response {
         private Long commentId;
-        private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        private String date;
         private String content;
 
         /* Entity -> Dto*/
