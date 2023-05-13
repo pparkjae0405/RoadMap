@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.List;
 
@@ -22,14 +24,27 @@ public class Roadmap {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // PK AutoIncrement
+    @Column(name = "roadmapId")
     private Long roadmapId;
 
     /**
-     * 글 작성 날짜, 조회수, 글 제목, 글 내용
+     * 글 작성 날짜, 글 수정 날짜, 조회수, 글 제목, 글 내용
      */
-    private String date;
-    private Long view;
+    @Column(name = "createdDate")
+    @CreatedDate
+    private String createdDate;
+
+    @Column(name = "modifiedDate")
+    @LastModifiedDate
+    private String modifiedDate;
+
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int view;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     /**
