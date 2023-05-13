@@ -3,7 +3,6 @@ package com.example.roadmap.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -14,27 +13,16 @@ import java.time.format.DateTimeFormatter;
  */
 
 @Getter
-@MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+@MappedSuperclass // Entity 클래스가 BaseTime 을 상속받을 때, createdDate, modifiedDate 를 인식할 수 있도록 하는 설정
+@EntityListeners(AuditingEntityListener.class) // 자동으로 값을 넣어주도록 하는 설정
 public class BaseTime {
-    @Column(name = "createdDate", nullable = false)
-    @CreatedDate
-    private String createdDate;
-
-    @Column(name = "modifiedDate", nullable = false)
-    @LastModifiedDate
-    private String modifiedDate;
+    @Column(nullable = false)
+    @CreatedDate // 데이터 생성할 때 시간 자동 생성
+    private String date;
 
     /* 해당 엔티티를 저장하기 이전에 실행 */
     @PrePersist
     public void onPrePersist(){
-        this.createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-        this.modifiedDate = this.createdDate;
-    }
-
-    /* 해당 엔티티를 업데이트 하기 이전에 실행*/
-    @PreUpdate
-    public void onPreUpdate(){
-        this.modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        this.date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
     }
 }

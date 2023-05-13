@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 /**
  * 댓글 작성을 위한 Comment 테이블
@@ -26,15 +25,11 @@ public class Comment {
     private Long commentId;
 
     /**
-     * 댓글 작성 날짜, 댓글 수정 날짜, 댓글 내용
+     * 댓글 작성 날짜, 댓글 내용
      */
-    @Column(name = "createdDate")
+    @Column(nullable = false)
     @CreatedDate
-    private String createdDate;
-
-    @Column(name = "modifiedDate")
-    @LastModifiedDate
-    private String modifiedDate;
+    private String date;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;

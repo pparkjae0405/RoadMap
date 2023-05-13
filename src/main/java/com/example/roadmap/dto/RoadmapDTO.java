@@ -18,8 +18,7 @@ public class RoadmapDTO {
     @Builder
     public static class Request {
         private Long roadmapId;
-        private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-        private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         private int view;
         private String title;
         private String content;
@@ -28,8 +27,7 @@ public class RoadmapDTO {
         public Roadmap toEntity() {
             Roadmap roadmap = Roadmap.builder()
                     .roadmapId(roadmapId)
-                    .createdDate(createdDate)
-                    .modifiedDate(modifiedDate)
+                    .date(date)
                     .view(0)
                     .title(title)
                     .content(content)
@@ -48,8 +46,7 @@ public class RoadmapDTO {
     @RequiredArgsConstructor
     public static class Response{
         private Long roadmapId;
-        private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-        private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         private int view;
         private String title;
         private String content;
@@ -59,8 +56,7 @@ public class RoadmapDTO {
         /* Entity -> Dto*/
         public Response(Roadmap roadmap) {
             this.roadmapId = roadmap.getRoadmapId();
-            this.createdDate = roadmap.getCreatedDate();
-            this.modifiedDate = roadmap.getModifiedDate();
+            this.date = roadmap.getDate();
             this.view = roadmap.getView();
             this.title = roadmap.getTitle();
             this.content = roadmap.getContent();
