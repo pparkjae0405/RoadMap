@@ -20,13 +20,19 @@ public class Info {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "infoId")
     private Long infoId;
 
     /**
      * 로드맵 시작 날짜, 로드맵 제목, 로드맵 내용
      */
+    @Column(nullable = false)
     private String date;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     /**
