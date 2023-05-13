@@ -86,7 +86,7 @@
 3. 1,2번이 완료되면 pull request를 보내 merge 요청
 4. 코드 리뷰하여 충돌이 있으면 해결 후 중앙 remote의 main branch에 내 작업물을 merge
 5. merge되었다면 main branch로 이동하여 로컬-중앙 remote 코드 간 pull으로 동기화
-6. 로컬의 feature/기능-개발 branch 삭제, 중앙remote에서는 삭제X
+6. 로컬&중앙 remote의 feature/기능-개발 branch 삭제
 
 ### 공동 작업자
 
@@ -101,4 +101,4 @@
 3. 1,2번이 완료되면 pull request를 보내 merge 요청
 4. 코드 리뷰하여 충돌이 있으면 해결 후 중앙 remote의 main branch에 내 작업물이 merge됨
 5. merge되었다면 main branch로 이동하여 로컬-중앙 remote 코드 간 pull으로 동기화
-6. 로컬의 feature/기능-개발 branch 삭제, 중앙remote에서는 삭제X
+6. 로컬&중앙 remote의 feature/기능-개발 branch 삭제
