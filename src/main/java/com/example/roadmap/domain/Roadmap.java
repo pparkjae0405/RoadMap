@@ -54,6 +54,7 @@ public class Roadmap {
     // cascade = cascadeType.ALL : 상위 엔터티에서 하위 엔터티로 모든 작업을 전파
     // orphanRemoval = true : 부모 엔티티가 삭제되면 자식 엔티티도 삭제
     @OneToMany(mappedBy = "roadmap", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("date asc")
     private List<Info> infos;
 
     /**
