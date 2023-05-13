@@ -3,6 +3,8 @@ package com.example.roadmap.dto;
 import com.example.roadmap.domain.Roadmap;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,8 +18,9 @@ public class RoadmapDTO {
     @Builder
     public static class Request {
         private Long roadmapId;
-        private String date;
-        private Long view;
+        private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        private int view;
         private String title;
         private String content;
 
@@ -25,8 +28,9 @@ public class RoadmapDTO {
         public Roadmap toEntity() {
             Roadmap roadmap = Roadmap.builder()
                     .roadmapId(roadmapId)
-                    .date(date)
-                    .view(view)
+                    .createdDate(createdDate)
+                    .modifiedDate(modifiedDate)
+                    .view(0)
                     .title(title)
                     .content(content)
                     .build();
@@ -44,8 +48,9 @@ public class RoadmapDTO {
     @RequiredArgsConstructor
     public static class Response{
         private Long roadmapId;
-        private String date;
-        private Long view;
+        private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        private int view;
         private String title;
         private String content;
         private List<InfoDTO.Response> infos;
@@ -54,7 +59,8 @@ public class RoadmapDTO {
         /* Entity -> Dto*/
         public Response(Roadmap roadmap) {
             this.roadmapId = roadmap.getRoadmapId();
-            this.date = roadmap.getDate();
+            this.createdDate = roadmap.getCreatedDate();
+            this.modifiedDate = roadmap.getModifiedDate();
             this.view = roadmap.getView();
             this.title = roadmap.getTitle();
             this.content = roadmap.getContent();
