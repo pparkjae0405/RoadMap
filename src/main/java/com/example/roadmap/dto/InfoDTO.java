@@ -41,19 +41,15 @@ public class InfoDTO {
     @Getter
     @RequiredArgsConstructor
     public static class Response {
-        private Long infoId;
         private String date;
         private String title;
         private String content;
-        private Long roadmapId;
 
         /* Entity -> Dto*/
         public Response(Info info) {
-            this.infoId = info.getInfoId();
             this.date = info.getDate();
             this.title = info.getTitle();
             this.content = info.getContent();
-            this.roadmapId = info.getRoadmap().getRoadmapId();
         }
     }
 }

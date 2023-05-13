@@ -48,7 +48,6 @@ public class CommentDTO {
         private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
         private String content;
-        private Long roadmapId;
 
         /* Entity -> Dto*/
         public Response(Comment comment) {
@@ -56,7 +55,6 @@ public class CommentDTO {
             this.createdDate = comment.getCreatedDate();
             this.modifiedDate = comment.getModifiedDate();
             this.content = comment.getContent();
-            this.roadmapId = comment.getRoadmap().getRoadmapId();
         }
     }
 }
