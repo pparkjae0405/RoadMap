@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.List;
 
@@ -28,15 +27,11 @@ public class Roadmap {
     private Long roadmapId;
 
     /**
-     * 글 작성 날짜, 글 수정 날짜, 조회수, 글 제목, 글 내용
+     * 글 작성 날짜, 조회수, 글 제목, 글 내용
      */
-    @Column(name = "createdDate")
+    @Column(nullable = false)
     @CreatedDate
-    private String createdDate;
-
-    @Column(name = "modifiedDate")
-    @LastModifiedDate
-    private String modifiedDate;
+    private String date;
 
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int view;
