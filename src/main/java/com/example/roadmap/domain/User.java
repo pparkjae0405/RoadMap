@@ -2,6 +2,8 @@ package com.example.roadmap.domain;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class User {
 
@@ -34,4 +36,11 @@ public class User {
     @Column(name = "refreshTokenExpire")
     private String refreshTokenExpire;
 
+    // comment 외래키 설정
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
+    // roadMap 외래키 설정
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Roadmap> roadmaps;
 }

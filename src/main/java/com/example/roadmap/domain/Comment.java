@@ -37,6 +37,10 @@ public class Comment extends BaseTime{
     @JoinColumn(name = "roadmapId") // 지정된 이름으로 외래 키 매핑
     private Roadmap roadmap;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
+
     /**
      * 댓글 수정
      */
