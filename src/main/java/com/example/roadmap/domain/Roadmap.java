@@ -53,6 +53,10 @@ public class Roadmap extends BaseTime{
     @OneToMany(mappedBy = "roadmap", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
+
     /**
      * 글 수정
      */
