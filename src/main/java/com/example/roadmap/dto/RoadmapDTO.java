@@ -47,6 +47,7 @@ public class RoadmapDTO {
         private String title;
         private String content;
         private List<InfoDTO.Response> infos;
+        private List<TagDTO.Response> tags;
         private List<CommentDTO.Response> comments;
 
         /* Entity -> Dto*/
@@ -59,6 +60,10 @@ public class RoadmapDTO {
             this.infos = roadmap.getInfos()
                     .stream()
                     .map(InfoDTO.Response::new)
+                    .collect(Collectors.toList());
+            this.tags = roadmap.getTags()
+                    .stream()
+                    .map(TagDTO.Response::new)
                     .collect(Collectors.toList());
             this.comments = roadmap.getComments()
                     .stream()
