@@ -37,12 +37,10 @@ public class TagDTO {
     @Getter
     @RequiredArgsConstructor
     public static class Response {
-        private Long tagId;
         private String tag;
 
         /* Entity -> Dto*/
         public Response(Tag tag) {
-            this.tagId = tag.getTagId();
             this.tag = tag.getTag();
         }
     }
