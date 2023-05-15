@@ -38,7 +38,7 @@ public class Roadmap extends BaseTime{
     private String content;
 
     /**
-     * Roadmap은 Info와 일대다 연관관계를 가짐
+     * Roadmap은 Info, Tag, Comment와 일대다 연관관계를 가짐
      */
     // mappedBy = "roadmap" : FK는 다 쪽에서 관리
     // cascade = cascadeType.ALL : 상위 엔터티에서 하위 엔터티로 모든 작업을 전파
@@ -47,12 +47,13 @@ public class Roadmap extends BaseTime{
     @OrderBy("date asc")
     private List<Info> infos;
 
-    /**
-     * Roadmap과 Comment는 일대다 연관관계를 가짐
-     */
+    @OneToMany(mappedBy = "roadmap", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tag> tags;
+
     @OneToMany(mappedBy = "roadmap", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
+    // ManyToOne의 기본값은 EAGER이기에 LAZY로 변경
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
