@@ -2,9 +2,16 @@ package com.example.roadmap.controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.example.roadmap.service.UserService;
+
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping(value = "/user")
+@RequiredArgsConstructor
 public class UserController {
+
+    private final UserService userService;
 
     // 내 정보 조회 Api
     @GetMapping(value = "/{userId}/info")
