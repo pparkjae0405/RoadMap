@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
+    /**
+     * Tour 페이지 조회
+     */
     // 최초로 조회한 경우(cursor == null)
     Page<Roadmap> findAllByOrderByRoadmapIdDesc(PageRequest pageRequest);
 

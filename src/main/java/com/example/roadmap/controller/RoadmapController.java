@@ -50,7 +50,7 @@ public class RoadmapController {
     }
 
     /**
-     * Tour 페이지 조회
+     * Tour 페이지 조회 ( GET /tour/list?cursor={cursor} )
      *
      */
     @GetMapping("/tour/list")

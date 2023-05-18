@@ -70,7 +70,7 @@ public class RoadmapService {
      */
     @Transactional
     public List<RoadmapDTO.TourResponse> readTour(Long cursor){
-        // 한번에 불러올 페이지 수만큼 PageRequest를 만듬
+        // 한번에 불러올 페이지 수(10개)만큼 PageRequest를 만듬
         PageRequest pageRequest = PageRequest.of(0, 10);
 
         // 최초 조회인지 아닌지 판별하여 해당하는 roadmapRepository의 기능 호출
@@ -80,7 +80,7 @@ public class RoadmapService {
             roadmapPage = roadmapRepository
                     .findAllByOrderByRoadmapIdDesc(pageRequest);
         }else{
-            // 아니라면 cursor 이하의 최근에 올라온 글 10개
+            // 아니라면 cursor 미만 최근에 올라온 글 10개
             roadmapPage = roadmapRepository
                     .findByRoadmapIdLessThanOrderByRoadmapIdDesc(cursor, pageRequest);
         }
