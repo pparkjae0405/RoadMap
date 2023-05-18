@@ -48,4 +48,13 @@ public class RoadmapController {
         roadmapService.delete(roadmapId);
         return ResponseEntity.ok(roadmapId);
     }
+
+    /**
+     * Tour 페이지 조회
+     *
+     */
+    @GetMapping("/tour/list")
+    public ResponseEntity readTour(Long cursor){
+        return ResponseEntity.ok(roadmapService.readTour(cursor));
+    }
 }
