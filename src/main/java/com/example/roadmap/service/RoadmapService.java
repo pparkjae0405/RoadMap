@@ -4,8 +4,13 @@ import com.example.roadmap.domain.Roadmap;
 import com.example.roadmap.dto.RoadmapDTO;
 import com.example.roadmap.repository.RoadmapRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor // final 혹은 @NotNull이 붙은 필드의 생성자를 자동으로 만들어준다
@@ -58,5 +63,34 @@ public class RoadmapService {
                 new IllegalArgumentException("해당 게시글이 존재하지 않습니다. roadmapId=" + roadmapId));
 
         roadmapRepository.delete(roadmap);
+    }
+
+    /**
+     * Tour 페이지 조회
+     */
+    @Transactional
+    public List<RoadmapDTO.TourResponse> readTour(Long cursor){
+        // 한번에 불러올 페이지 수만큼 PageRequest를 만듬
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        // 최초 조회인지 아닌지 판별하여 해당하는 roadmapRepository의 기능 호출
+        Page<Roadmap> roadmapPage;
+        if(cursor == null) {
+            // 최초 조회라면 가장 최근에 올라온 글 10개
+            roadmapPage = roadmapRepository
+                    .findAllByOrderByRoadmapIdDesc(pageRequest);
+        }else{
+            // 아니라면 cursor 이하의 최근에 올라온 글 10개
+            roadmapPage = roadmapRepository
+                    .findByRoadmapIdLessThanOrderByRoadmapIdDesc(cursor, pageRequest);
+        }
+
+        // 마지막에 불러왔던 cursor와 pageRequest를 인자로 전달
+        List<Roadmap> roadmaps = roadmapPage.getContent();
+
+        // roadmaps를 RoadmapDTO.TourResponse 형태로 가공하여 리턴
+        return roadmaps.stream()
+                .map(RoadmapDTO.TourResponse::new)
+                .collect(Collectors.toList());
     }
 }
