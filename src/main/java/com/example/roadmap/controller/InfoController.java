@@ -21,16 +21,6 @@ public class InfoController {
     }
 
     /**
-     * 로드맵 수정 ( PUT /tour/{roadmapId}/info/{infoId} )
-     *
-     */
-    @PutMapping({"/tour/{roadmapId}/info/{infoId}"})
-    public ResponseEntity update(@PathVariable Long infoId, @RequestBody InfoDTO.Request dto) {
-        infoService.update(infoId, dto);
-        return ResponseEntity.ok(infoId);
-    }
-
-    /**
      * 로드맵 삭제 ( DELETE /tour/{roadmapId}/info/{infoId} )
      *
      */

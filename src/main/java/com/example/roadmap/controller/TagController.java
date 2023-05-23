@@ -21,16 +21,6 @@ public class TagController {
     }
 
     /**
-     * 태그 수정 ( PUT /tour/{roadmapId}/tag/{tagId} )
-     *
-     */
-    @PutMapping({"/tour/{roadmapId}/tag/{tagId}"})
-    public ResponseEntity update(@PathVariable Long tagId, @RequestBody TagDTO.Request dto) {
-        tagService.update(tagId, dto);
-        return ResponseEntity.ok(tagId);
-    }
-
-    /**
      * 태그 삭제 ( DELETE /tour/{roadmapId}/tag/{tagId} )
      *
      */

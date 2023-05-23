@@ -33,18 +33,6 @@ public class TagService {
     }
 
     /**
-     * 태그 수정
-     */
-    @Transactional
-    public void update(Long tagId, TagDTO.Request dto) {
-        // 넘어온 commentId와 dto를 통해 comment의 content를 수정
-        Tag tag = tagRepository.findById(tagId).orElseThrow(() ->
-                new IllegalArgumentException("해당 태그가 존재하지 않습니다. tagId=" + tagId));
-        //
-        tag.update(dto.getTag());
-    }
-
-    /**
      * 태그 삭제
      */
     @Transactional

@@ -33,18 +33,6 @@ public class InfoService {
     }
 
     /**
-     * 로드맵 수정
-     */
-    @Transactional
-    public void update(Long infoId, InfoDTO.Request dto) {
-        // 넘어온 commentId와 dto를 통해 comment의 content를 수정
-        Info info = infoRepository.findById(infoId).orElseThrow(() ->
-                new IllegalArgumentException("해당 로드맵이 존재하지 않습니다. infoId=" + infoId));
-        //
-        info.update(dto.getDate(), dto.getTitle(), dto.getContent());
-    }
-
-    /**
      * 로드맵 삭제
      */
     @Transactional
