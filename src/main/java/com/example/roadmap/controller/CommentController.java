@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController // Restuful 웹서비스의 컨트롤러, Json 형태로 객체 데이터를 반환
 @RequiredArgsConstructor // final 혹은 @NotNull이 붙은 필드의 생성자를 자동으로 만들어준다
 public class CommentController {
@@ -20,15 +18,6 @@ public class CommentController {
     @PostMapping("/tour/{roadmapId}/comment")
     public ResponseEntity save(@PathVariable Long roadmapId, @RequestBody CommentDTO.Request dto) {
         return ResponseEntity.ok(commentService.save(roadmapId, dto));
-    }
-
-    /**
-     * 댓글 조회 ( GET /tour/{roadmapId}/comment )
-     *
-     */
-    @GetMapping("/tour/{roadmapId}/comment")
-    public List<CommentDTO.Response> read(@PathVariable Long roadmapId) {
-        return commentService.findAll(roadmapId);
     }
 
     /**

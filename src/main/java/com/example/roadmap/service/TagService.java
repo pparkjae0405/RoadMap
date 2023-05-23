@@ -9,9 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor // final 혹은 @NotNull이 붙은 필드의 생성자를 자동으로 만들어준다
 public class TagService {
@@ -33,21 +30,6 @@ public class TagService {
         tagRepository.save(tag);
 
         return tag.getTagId();
-    }
-
-    /**
-     * 태그 조회
-     */
-    @Transactional
-    public List<TagDTO.Response> findAll(Long roadmapId) {
-        // 넘어온 roadmapId를 통해 roadmap을 불러오고
-        Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시글이 존재하지 않습니다. roadmapId: " + roadmapId));
-
-        // roadmap.getTag를 통해 tag 리스트를 불러와
-        List<Tag> tags = roadmap.getTags();
-        // List<TagDTO.Response>의 형태로 리턴
-        return tags.stream().map(TagDTO.Response::new).collect(Collectors.toList());
     }
 
     /**
