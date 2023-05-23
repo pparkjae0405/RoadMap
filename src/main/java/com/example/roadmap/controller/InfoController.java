@@ -23,12 +23,12 @@ public class InfoController {
     }
 
     /**
-     * 로드맵 삭제 ( DELETE /tour/{roadmapId}/info/{infoId} )
+     * 로드맵 삭제 ( DELETE /tour/{roadmapId}/info )
      *
      */
-    @DeleteMapping("/tour/{roadmapId}/info/{infoId}")
-    public ResponseEntity delete(@PathVariable Long infoId) {
-        infoService.delete(infoId);
-        return ResponseEntity.ok(infoId);
+    @DeleteMapping("/tour/{roadmapId}/info")
+    public ResponseEntity delete(@PathVariable Long roadmapId) {
+        infoService.delete(roadmapId);
+        return ResponseEntity.ok(roadmapId);
     }
 }

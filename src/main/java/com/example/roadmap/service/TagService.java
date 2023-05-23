@@ -47,11 +47,13 @@ public class TagService {
      * 태그 삭제
      */
     @Transactional
-    public void delete(Long tagId) {
-        // 넘어온 infoId를 통해 해당 info를 삭제
-        Tag tag = tagRepository.findById(tagId).orElseThrow(() ->
-                new IllegalArgumentException("해당 태그가 존재하지 않습니다. tagId=" + tagId));
+    public void delete(Long roadmapId) {
+        // findByRoadmap_RoadmapId를 호출하여 넘어온 roadmapId에 해당하는 tag 리스트를 찾아
+        List<Tag> tags = tagRepository.findByRoadmap_RoadmapId(roadmapId);
 
-        tagRepository.delete(tag);
+        // 모두 삭제한다.
+        for(int i = 0 ; i < tags.size() ; i++){
+            tagRepository.delete(tags.get(i));
+        }
     }
 }

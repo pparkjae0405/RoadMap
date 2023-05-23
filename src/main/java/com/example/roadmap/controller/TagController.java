@@ -23,12 +23,12 @@ public class TagController {
     }
 
     /**
-     * 태그 삭제 ( DELETE /tour/{roadmapId}/tag/{tagId} )
+     * 태그 삭제 ( DELETE /tour/{roadmapId}/tag )
      *
      */
-    @DeleteMapping("/tour/{roadmapId}/tag/{tagId}")
-    public ResponseEntity delete(@PathVariable Long tagId) {
-        tagService.delete(tagId);
-        return ResponseEntity.ok(tagId);
+    @DeleteMapping("/tour/{roadmapId}/tag")
+    public ResponseEntity delete(@PathVariable Long roadmapId) {
+        tagService.delete(roadmapId);
+        return ResponseEntity.ok(roadmapId);
     }
 }

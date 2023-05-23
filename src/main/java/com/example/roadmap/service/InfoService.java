@@ -47,11 +47,13 @@ public class InfoService {
      * 로드맵 삭제
      */
     @Transactional
-    public void delete(Long infoId) {
-        // 넘어온 infoId를 통해 해당 info를 삭제
-        Info info = infoRepository.findById(infoId).orElseThrow(() ->
-                new IllegalArgumentException("해당 로드맵이 존재하지 않습니다. infoId=" + infoId));
+    public void delete(Long roadmapId) {
+        // findByRoadmap_RoadmapId를 호출하여 넘어온 roadmapId에 해당하는 info 리스트를 찾아
+        List<Info> infos = infoRepository.findByRoadmap_RoadmapId(roadmapId);
 
-        infoRepository.delete(info);
+        // 모두 삭제한다.
+        for(int i = 0 ; i < infos.size() ; i++){
+            infoRepository.delete(infos.get(i));
+        }
     }
 }
