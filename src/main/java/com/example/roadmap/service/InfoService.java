@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor // final 혹은 @NotNull이 붙은 필드의 생성자를 자동으로 만들어준다
@@ -22,55 +21,39 @@ public class InfoService {
      * 로드맵 작성
      */
     @Transactional
-    public Long save(Long roadmapId, InfoDTO.Request dto) {
+    public Long save(Long roadmapId, List<InfoDTO.Request> dto) {
         // 넘어온 roadmapId를 통해 roadmap을 불러오고
         Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow(() ->
                 new IllegalArgumentException("로드맵 쓰기 실패: 해당 게시글이 존재하지 않습니다. " + roadmapId));
-        // dto의 roadmap을 설정한 다음
-        dto.setRoadmap(roadmap);
-        // dto를 엔티티로 바꿔 info에 저장
-        Info info = dto.toEntity();
-        infoRepository.save(info);
 
-        return info.getInfoId();
-    }
+        // 작성할 로드맵 개수만큼 반복하여
+        for(int i = 0 ; i < dto.size() ; i++){
+            // dto의 값을 하나씩 InfoDTO.Request 형태로 불러온 뒤
+            InfoDTO.Request dtoValue = dto.get(i);
 
-    /**
-     * 로드맵 조회
-     */
-    @Transactional
-    public List<InfoDTO.Response> findAll(Long roadmapId) {
-        // 넘어온 roadmapId를 통해 roadmap을 불러오고
-        Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시글이 존재하지 않습니다. roadmapId: " + roadmapId));
+            // dtoValue의 roadmap을 설정한 다음
+            dtoValue.setRoadmap(roadmap);
 
-        // roadmap.getInfo를 통해 info 리스트를 불러와
-        List<Info> infos = roadmap.getInfos();
-        // List<InfoDTO.Response>의 형태로 리턴
-        return infos.stream().map(InfoDTO.Response::new).collect(Collectors.toList());
-    }
+            // dtoValue를 엔티티로 바꿔 info에 저장시킨다.
+            Info info = dtoValue.toEntity();
+            infoRepository.save(info);
+        }
 
-    /**
-     * 로드맵 수정
-     */
-    @Transactional
-    public void update(Long infoId, InfoDTO.Request dto) {
-        // 넘어온 commentId와 dto를 통해 comment의 content를 수정
-        Info info = infoRepository.findById(infoId).orElseThrow(() ->
-                new IllegalArgumentException("해당 로드맵이 존재하지 않습니다. infoId=" + infoId));
-        //
-        info.update(dto.getDate(), dto.getTitle(), dto.getContent());
+        // 로드맵을 전부 저장했다면 로드맵을 저장한 글 번호를 리턴
+        return roadmap.getRoadmapId();
     }
 
     /**
      * 로드맵 삭제
      */
     @Transactional
-    public void delete(Long infoId) {
-        // 넘어온 infoId를 통해 해당 info를 삭제
-        Info info = infoRepository.findById(infoId).orElseThrow(() ->
-                new IllegalArgumentException("해당 로드맵이 존재하지 않습니다. infoId=" + infoId));
+    public void delete(Long roadmapId) {
+        // findByRoadmap_RoadmapId를 호출하여 넘어온 roadmapId에 해당하는 info 리스트를 찾아
+        List<Info> infos = infoRepository.findByRoadmap_RoadmapId(roadmapId);
 
-        infoRepository.delete(info);
+        // 모두 삭제한다.
+        for(int i = 0 ; i < infos.size() ; i++){
+            infoRepository.delete(infos.get(i));
+        }
     }
 }
