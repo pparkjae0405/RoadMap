@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor // final 혹은 @NotNull이 붙은 필드의 생성자를 자동으로 만들어준다
 public class InfoService {
@@ -19,17 +21,26 @@ public class InfoService {
      * 로드맵 작성
      */
     @Transactional
-    public Long save(Long roadmapId, InfoDTO.Request dto) {
+    public Long save(Long roadmapId, List<InfoDTO.Request> dto) {
         // 넘어온 roadmapId를 통해 roadmap을 불러오고
         Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow(() ->
                 new IllegalArgumentException("로드맵 쓰기 실패: 해당 게시글이 존재하지 않습니다. " + roadmapId));
-        // dto의 roadmap을 설정한 다음
-        dto.setRoadmap(roadmap);
-        // dto를 엔티티로 바꿔 info에 저장
-        Info info = dto.toEntity();
-        infoRepository.save(info);
 
-        return info.getInfoId();
+        // 작성할 로드맵 개수만큼 반복하여
+        for(int i = 0 ; i < dto.size() ; i++){
+            // dto의 값을 하나씩 InfoDTO.Request 형태로 불러온 뒤
+            InfoDTO.Request dtoValue = dto.get(i);
+
+            // dtoValue의 roadmap을 설정한 다음
+            dtoValue.setRoadmap(roadmap);
+
+            // dtoValue를 엔티티로 바꿔 info에 저장시킨다.
+            Info info = dtoValue.toEntity();
+            infoRepository.save(info);
+        }
+
+        // 로드맵을 전부 저장했다면 로드맵을 저장한 글 번호를 리턴
+        return roadmap.getRoadmapId();
     }
 
     /**
