@@ -98,4 +98,25 @@ public class RoadmapDTO {
             this.commentCount = roadmap.getComments().size();
         }
     }
+
+    /**
+     * 검색 결과 조회 정보를 리턴할 응답(Response) 클래스
+     */
+    @Getter
+    @RequiredArgsConstructor
+    public static class FindResponse{
+        private Long roadmapId;
+        private String date;
+        private int view;
+        private String title;
+        private int commentCount;
+
+        public FindResponse(Roadmap roadmap){
+            this.roadmapId = roadmap.getRoadmapId();
+            this.date = roadmap.getDate();
+            this.view = roadmap.getView();
+            this.title = roadmap.getTitle();
+            this.commentCount = roadmap.getComments().size();
+        }
+    }
 }
