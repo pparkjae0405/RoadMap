@@ -93,4 +93,33 @@ public class RoadmapService {
                 .map(RoadmapDTO.TourResponse::new)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 검색 결과 조회
+     */
+    @Transactional
+    public List<RoadmapDTO.FindResponse> readFind(String keyword, Long cursor){
+        // 한번에 불러올 페이지 수(10개)만큼 PageRequest를 만듬
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        // 최초 조회인지 아닌지 판별하여 해당하는 roadmapRepository의 기능 호출
+        Page<Roadmap> roadmapPage;
+        if(cursor == null) {
+            // 최초 조회라면 keyword에 해당하는 글들을 최신 순으로 10개,
+            roadmapPage = roadmapRepository
+                    .findByTitleContainingOrderByRoadmapIdDesc(keyword, pageRequest);
+        }else{
+            // 아니라면 cursor 미만 keyword에 해당하는 글들을 최신 순으로 10개
+            roadmapPage = roadmapRepository
+                    .findByRoadmapIdLessThanAndTitleContainingOrderByRoadmapIdDesc(cursor, keyword, pageRequest);
+        }
+
+        // 마지막에 불러왔던 cursor와 pageRequest를 인자로 전달
+        List<Roadmap> roadmaps = roadmapPage.getContent();
+
+        // roadmaps를 RoadmapDTO.FindResponse 형태로 가공하여 리턴
+        return roadmaps.stream()
+                .map(RoadmapDTO.FindResponse::new)
+                .collect(Collectors.toList());
+    }
 }
