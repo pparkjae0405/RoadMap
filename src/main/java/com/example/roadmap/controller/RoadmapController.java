@@ -53,4 +53,12 @@ public class RoadmapController {
     public ResponseEntity readTour(Long cursor){
         return ResponseEntity.ok(roadmapService.readTour(cursor));
     }
+
+    /**
+     * 검색 결과 조회 ( GET /find?keyword={keyword}&cursor={cursor} )
+     */
+    @GetMapping("/find")
+    public ResponseEntity readFind(String keyword, Long cursor){
+        return ResponseEntity.ok(roadmapService.readFind(keyword, cursor));
+    }
 }
