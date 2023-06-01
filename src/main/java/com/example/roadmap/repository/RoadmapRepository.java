@@ -31,4 +31,11 @@ public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
     // TitleContaining = title이 keyword을 포함하고 있는 것들을 찾는데
     // OrderByRoadmapIdDesc = 정렬기준을 RoadmapId Desc로 하여라
     Page<Roadmap> findByRoadmapIdLessThanAndTitleContainingOrderByRoadmapIdDesc(Long cursor, String keyword, PageRequest pageRequest);
+
+    /**
+     * 메인 페이지 조회
+     */
+    // 조회순
+    Page<Roadmap> findAllByOrderByViewDesc(PageRequest pageRequest);
+    // 최신순(findAllByOrderByRoadmapIdDesc) 재사용
 }
