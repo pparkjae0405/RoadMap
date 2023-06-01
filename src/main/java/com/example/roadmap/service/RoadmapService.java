@@ -122,4 +122,62 @@ public class RoadmapService {
                 .map(RoadmapDTO.FindResponse::new)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 메인 페이지 조회순 조회
+     */
+    @Transactional
+    public List<RoadmapDTO.MainPopularResponse> readMainPopular(){
+        // 한번에 불러올 페이지 수(5개)만큼 PageRequest를 만듬
+        PageRequest pageRequest = PageRequest.of(0, 5);
+
+        // 조회순 글을 5개 불러오고
+        Page<Roadmap> roadmapPage = roadmapRepository.findAllByOrderByViewDesc(pageRequest);
+
+        // 내용을 Roadmap 리스트로 불러와
+        List<Roadmap> roadmaps = roadmapPage.getContent();
+
+        // roadmaps를 RoadmapDTO.MainPopularResponse 형태로 가공하여 리턴
+        return roadmaps.stream()
+                .map(RoadmapDTO.MainPopularResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 메인 페이지 최신순 조회
+     */
+    public List<RoadmapDTO.MainRecentResponse> readMainRecent(){
+        // 한번에 불러올 페이지 수(5개)만큼 PageRequest를 만듬
+        PageRequest pageRequest = PageRequest.of(0, 5);
+
+        // 최신순 글을 5개 불러오고
+        Page<Roadmap> roadmapPage = roadmapRepository.findAllByOrderByRoadmapIdDesc(pageRequest);
+
+        // 내용을 Roadmap 리스트로 불러와
+        List<Roadmap> roadmaps = roadmapPage.getContent();
+
+        // roadmaps를 RoadmapDTO.MainRecentResponse 형태로 가공하여 리턴
+        return roadmaps.stream()
+                .map(RoadmapDTO.MainRecentResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 메인 페이지 탑10북 조회
+     */
+    public List<RoadmapDTO.MainTopbookResponse> readMainTopbook(){
+        // 한번에 불러올 페이지 수(10개)만큼 PageRequest를 만듬
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        // 조회순 글을 10개 불러오고
+        Page<Roadmap> roadmapPage = roadmapRepository.findAllByOrderByViewDesc(pageRequest);
+
+        // 내용을 Roadmap 리스트로 불러와
+        List<Roadmap> roadmaps = roadmapPage.getContent();
+
+        // roadmaps를 RoadmapDTO.MainTopbookResponse 형태로 가공하여 리턴
+        return roadmaps.stream()
+                .map(RoadmapDTO.MainTopbookResponse::new)
+                .collect(Collectors.toList());
+    }
 }
