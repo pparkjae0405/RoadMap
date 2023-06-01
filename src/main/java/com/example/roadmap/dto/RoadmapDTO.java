@@ -119,4 +119,59 @@ public class RoadmapDTO {
             this.commentCount = roadmap.getComments().size();
         }
     }
+
+    /**
+     * 메인 페이지 조회순 조회 정보를 리턴할 응답(Response) 클래스
+     */
+    @Getter
+    @RequiredArgsConstructor
+    public static class MainPopularResponse{
+        private Long roadmapId;
+        private String date;
+        private int view;
+        private String title;
+        private int commentCount;
+
+        public MainPopularResponse(Roadmap roadmap){
+            this.roadmapId = roadmap.getRoadmapId();
+            this.date = roadmap.getDate();
+            this.view = roadmap.getView();
+            this.title = roadmap.getTitle();
+            this.commentCount = roadmap.getComments().size();
+        }
+    }
+
+    /**
+     * 메인 페이지 최신순 조회 정보를 리턴할 응답(Response) 클래스
+     */
+    @Getter
+    @RequiredArgsConstructor
+    public static class MainRecentResponse{
+        private Long roadmapId;
+        private String date;
+        private int view;
+        private String title;
+        private int commentCount;
+
+        public MainRecentResponse(Roadmap roadmap){
+            this.roadmapId = roadmap.getRoadmapId();
+            this.date = roadmap.getDate();
+            this.view = roadmap.getView();
+            this.title = roadmap.getTitle();
+            this.commentCount = roadmap.getComments().size();
+        }
+    }
+
+    /**
+     * 메인 페이지 탑10북 조회 정보를 리턴할 응답(Response) 클래스
+     */
+    @Getter
+    @RequiredArgsConstructor
+    public static class MainTopbookResponse{
+        private String title;
+
+        public MainTopbookResponse(Roadmap roadmap){
+            this.title = roadmap.getInfos().get(0).getTitle();
+        }
+    }
 }
