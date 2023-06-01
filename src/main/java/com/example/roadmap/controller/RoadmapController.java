@@ -60,4 +60,28 @@ public class RoadmapController {
     public ResponseEntity readFind(String keyword, Long cursor){
         return ResponseEntity.ok(roadmapService.readFind(keyword, cursor));
     }
+
+    /**
+     * 메인 페이지 조회순 조회 ( GET /main/popular )
+     */
+    @GetMapping("/main/popular")
+    public ResponseEntity readMainPopular(){
+        return ResponseEntity.ok(roadmapService.readMainPopular());
+    }
+
+    /**
+     * 메인 페이지 최신순 조회 ( GET /main/recent )
+     */
+    @GetMapping("/main/recent")
+    public ResponseEntity readMainRecent(){
+        return ResponseEntity.ok(roadmapService.readMainRecent());
+    }
+
+    /**
+     * 메인 페이지 탑10북 조회 ( GET /main/topbook )
+     */
+    @GetMapping("/main/topbook")
+    public ResponseEntity readMainTopbook(){
+        return ResponseEntity.ok(roadmapService.readMainTopbook());
+    }
 }
