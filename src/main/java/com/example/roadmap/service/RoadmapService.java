@@ -37,6 +37,10 @@ public class RoadmapService {
         // 넘어온 roadmapId에 해당하는 roadmap을 찾고
         Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 존재하지 않습니다. roadmapId: " + roadmapId));
+
+        // 조회수를 증가시키고
+        roadmapRepository.increaseView(roadmapId);
+
         // RoadmapDTO.Response에 매칭시켜 리턴
         return new RoadmapDTO.Response(roadmap);
     }
