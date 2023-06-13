@@ -53,6 +53,9 @@ public class Roadmap extends BaseTime{
     @OneToMany(mappedBy = "roadmap", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
+    /**
+     * 회원 번호(FK)
+     */
     // ManyToOne의 기본값은 EAGER이기에 LAZY로 변경
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
