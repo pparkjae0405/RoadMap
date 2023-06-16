@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -47,5 +48,5 @@ public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
     @Modifying // Query 어노테이션으로 작성된 insert, update, delete를 사용하기 위함
     // roadmapId에 해당하는 Roadmap의 view를 1 증가시킨다.
     @Query("update Roadmap r set r.view = r.view + 1 where r.roadmapId = :roadmapId")
-    int increaseView(Long roadmapId);
+    int increaseView(@Param("roadmapId") Long roadmapId);
 }
