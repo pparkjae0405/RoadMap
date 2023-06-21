@@ -73,8 +73,9 @@ public class RoadmapControllerTest {
     public void testWrite() throws Exception {
 
         // 글 쓰기
-        RoadmapDTO.Request dto = new RoadmapDTO.Request((long) 1, 0, "제목1", "본문1");
-        ResponseEntity response = roadmapController.save(dto);
+        RoadmapDTO.Request dto = RoadmapDTO.Request.builder().title("제목1").content("본문1").build();
+        ResponseEntity response = roadmapController
+                .save(dto);
 
         // 테스트
         assertEquals(200, response.getStatusCode().value());
@@ -86,17 +87,12 @@ public class RoadmapControllerTest {
     @DisplayName("글 조회 테스트")
     public void testRead() throws Exception {
 
-        long roadmapId = 1;
-        int view = 0;
-        String title = "제목1";
-        String content = "본문1";
-
         // 글쓰기
-        RoadmapDTO.Request dto = new RoadmapDTO.Request(roadmapId, view, title, content);
+        RoadmapDTO.Request dto = RoadmapDTO.Request.builder().title("제목1").content("본문1").build();
         roadmapController.save(dto);
 
         // 글 조회
-        ResponseEntity response = roadmapController.read(roadmapId);
+        ResponseEntity response = roadmapController.read((long) 1);
         Object body = response.getBody();
         Map<String, String> jsonBody = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(body),
                 Map.class);
@@ -121,23 +117,17 @@ public class RoadmapControllerTest {
     @Test
     @DisplayName("글 수정 테스트")
     public void testUpdate() throws Exception {
-        long roadmapId = 1;
-        int view = 0;
-        String title = "제목1";
-        String content = "본문1";
 
         // 글쓰기
-        RoadmapDTO.Request dto = new RoadmapDTO.Request(roadmapId, view, title, content);
+        RoadmapDTO.Request dto = RoadmapDTO.Request.builder().title("제목1").content("본문1").build();
+
         roadmapController.save(dto);
 
-        String updatedTitle = "수정된 제목1";
-        String updatedContent = "수정된 본문1";
-
-        dto = new RoadmapDTO.Request(roadmapId, view, updatedTitle, updatedContent);
-        roadmapController.update(roadmapId, dto);
+        dto = RoadmapDTO.Request.builder().title("수정된 제목1").content("수정된 본문1").build();
+        roadmapController.update((long) 1, dto);
 
         // 글 조회
-        ResponseEntity response = roadmapController.read(roadmapId);
+        ResponseEntity response = roadmapController.read((long) 1);
         Object body = response.getBody();
         Map<String, String> jsonBody = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(body),
                 Map.class);
@@ -151,8 +141,8 @@ public class RoadmapControllerTest {
         assertEquals(1, jsonBody.get("roadmapId"));
         assertEquals(strToday, jsonBody.get("date"));
         assertEquals(0, jsonBody.get("view"));
-        assertEquals(updatedTitle, jsonBody.get("title"));
-        assertEquals(updatedContent, jsonBody.get("content"));
+        assertEquals("\uC218\uC815\uB41C \uC81C\uBAA91", jsonBody.get("title"));
+        assertEquals("\uC218\uC815\uB41C \uBCF8\uBB381", jsonBody.get("content"));
         assertNotNull(jsonBody.get("infos"));
         assertNotNull(jsonBody.get("tags"));
         assertNotNull(jsonBody.get("comments"));
@@ -162,16 +152,11 @@ public class RoadmapControllerTest {
     @Test
     @DisplayName("글 삭제 테스트")
     public void delete() throws Exception {
-        long roadmapId = 1;
-        int view = 0;
-        String title = "제목1";
-        String content = "본문1";
-
         // 글쓰기
-        RoadmapDTO.Request dto = new RoadmapDTO.Request(roadmapId, view, title, content);
+        RoadmapDTO.Request dto = RoadmapDTO.Request.builder().title("제목1").content("본문1").build();
         roadmapController.save(dto);
 
-        ResponseEntity responseEntity = roadmapController.delete(roadmapId);
+        ResponseEntity responseEntity = roadmapController.delete((long) 1);
         System.out.println(responseEntity);
 
     }
