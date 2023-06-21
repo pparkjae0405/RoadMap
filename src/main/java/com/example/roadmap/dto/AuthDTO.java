@@ -48,4 +48,17 @@ public class AuthDTO {
             }
         }
     }
+
+    /**
+     * 회원가입 유무를 리턴할 응답(Response) 클래스
+     */
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class LoginResponse {
+        private boolean loginSuccess;
+        private UserDTO.Response userResponse;
+        private String kakaoAccessToken;
+    }
 }

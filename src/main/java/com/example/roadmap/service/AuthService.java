@@ -1,6 +1,8 @@
 package com.example.roadmap.service;
 
+import com.example.roadmap.domain.User;
 import com.example.roadmap.dto.AuthDTO;
+import com.example.roadmap.dto.UserDTO;
 import com.example.roadmap.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -85,5 +87,27 @@ public class AuthService {
         } catch (JsonProcessingException e) { e.printStackTrace(); }
 
         return kakaoAccountResponse;
+    }
+
+    /**
+     * 회원가입 유무를 판별할 메소드
+     */
+    public AuthDTO.LoginResponse kakaoLogin(String kakaoAccessToken) {
+        // kakaoAccessToken 으로 카카오 회원정보를 받아오고
+        AuthDTO.KakaoAccountResponse kakaoAccountResponse = getKakaoInfo(kakaoAccessToken);
+
+        // 회원가입 유무를 판별할 loginResponse를 선언하여 토큰을 설정하고
+        AuthDTO.LoginResponse loginResponse = new AuthDTO.LoginResponse();
+        loginResponse.setKakaoAccessToken(kakaoAccessToken);
+
+        // 받아온 회원정보에서 email을 가져와 가입되어 있는지 확인하여
+        String kakaoEmail = kakaoAccountResponse.getKakao_account().getEmail();
+        if (userRepository.existsByEmail(kakaoEmail)) {
+            // 가입된 사용자이면 true + 해당 회원정보를 조회, UserDTO.Response로 매핑하여 리턴
+            loginResponse.setLoginSuccess(true);
+            UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(kakaoEmail));
+            loginResponse.setUserResponse(userResponse);
+        }
+        return loginResponse;
     }
 }

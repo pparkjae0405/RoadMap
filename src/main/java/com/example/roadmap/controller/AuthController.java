@@ -20,6 +20,6 @@ public class AuthController {
     public ResponseEntity authLogin(@PathVariable String registrationId,
                               @RequestParam("code") String code) {
         String kakaoAccessToken = authService.getKakaoAccessToken(code).getAccess_token();
-        return ResponseEntity.ok(authService.getKakaoInfo(kakaoAccessToken));
+        return ResponseEntity.ok(authService.kakaoLogin(kakaoAccessToken));
     }
 }
