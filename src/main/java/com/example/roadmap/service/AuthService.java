@@ -96,18 +96,38 @@ public class AuthService {
         // kakaoAccessToken 으로 카카오 회원정보를 받아오고
         AuthDTO.KakaoAccountResponse kakaoAccountResponse = getKakaoInfo(kakaoAccessToken);
 
-        // 회원가입 유무를 판별할 loginResponse를 선언하여 토큰을 설정하고
+        // 회원가입 유무를 판별할 loginResponse를 선언하고
         AuthDTO.LoginResponse loginResponse = new AuthDTO.LoginResponse();
-        loginResponse.setKakaoAccessToken(kakaoAccessToken);
 
         // 받아온 회원정보에서 email을 가져와 가입되어 있는지 확인하여
         String kakaoEmail = kakaoAccountResponse.getKakao_account().getEmail();
         if (userRepository.existsByEmail(kakaoEmail)) {
-            // 가입된 사용자이면 true + 해당 회원정보를 조회, UserDTO.Response로 매핑하여 리턴
+            // 가입된 사용자라면 true + 해당 회원정보(UserDTO.Response로 매핑)
             loginResponse.setLoginSuccess(true);
             UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(kakaoEmail));
             loginResponse.setUserResponse(userResponse);
+        }else {
+            // 가입되지 않은 사용자라면 false + 불러온 닉네임, 이메일을 UserDTO.Request로 빌드 후
+            UserDTO.Request userRequest = UserDTO.Request.builder()
+                    .nickName(kakaoAccountResponse.getKakao_account().getProfile().getNickname())
+                    .email(kakaoEmail)
+                    .build();
+
+            // UserDTO.Response로 매핑
+            UserDTO.Response userResponse = new UserDTO.Response(userRequest.toEntity());
+            loginResponse.setUserResponse(userResponse);
         }
         return loginResponse;
+    }
+
+    /**
+     * 회원 가입
+     */
+    public Long save(UserDTO.Request dto) {
+        // 넘어온 dto를 엔티티로 바꿔 User에 저장
+        User user = dto.toEntity();
+        userRepository.save(user);
+
+        return user.getUserId();
     }
 }

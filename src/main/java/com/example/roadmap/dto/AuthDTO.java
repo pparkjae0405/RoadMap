@@ -59,6 +59,5 @@ public class AuthDTO {
     public static class LoginResponse {
         private boolean loginSuccess;
         private UserDTO.Response userResponse;
-        private String kakaoAccessToken;
     }
 }
