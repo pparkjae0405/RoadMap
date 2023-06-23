@@ -49,7 +49,7 @@ public class RoadmapController {
      * Tour 페이지 조회 ( GET /tour/list?cursor={cursor} )
      */
     @GetMapping("/tour/list")
-    public ResponseEntity readTour(@PathVariable Long cursor){
+    public ResponseEntity readTour(Long cursor){
         return ResponseEntity.ok(roadmapService.readTour(cursor));
     }
 
