@@ -22,7 +22,7 @@ public class AuthController {
     }
 
     /**
-     * 회원 가입 ( GET /signup )
+     * 회원 가입 ( POST /signup )
      */
     @PostMapping(value = "/signup")
     public ResponseEntity save(@RequestBody UserDTO.Request dto) {
