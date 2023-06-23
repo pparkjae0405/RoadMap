@@ -28,7 +28,7 @@ public class User {
     /**
      * 닉네임, 이메일, 직무
      */
-    @Column(name = "nickName", nullable = false, unique = true)
+    @Column(name = "nickName", nullable = false)
     private String nickName;
 
     @Column(nullable = false)
@@ -50,9 +50,10 @@ public class User {
     private List<Comment> comments;
 
     /**
-     * 직무 수정
+     * 회원정보 수정
      */
-    public void update(String major) {
+    public void update(String nickName, String major) {
+        this.nickName = nickName;
         this.major = major;
     }
 }
