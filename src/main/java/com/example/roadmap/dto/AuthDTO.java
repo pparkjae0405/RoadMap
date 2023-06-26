@@ -50,6 +50,37 @@ public class AuthDTO {
     }
 
     /**
+     * 네이버 access token 정보를 리턴할 응답(Response) 클래스
+     */
+    @Getter
+    @RequiredArgsConstructor
+    public static class NaverTokenResponse {
+        private String access_token;
+        private String refresh_token;
+        private String token_type;
+        private int expires_in;
+    }
+
+    /**
+     * 네이버 회원정보를 리턴할 응답(Response) 클래스
+     */
+    @Getter
+    @RequiredArgsConstructor
+    public static class NaverAccountResponse {
+        private String resultcode;
+        private String message;
+        private response response;
+
+        @Getter
+        @RequiredArgsConstructor
+        public class response {
+            private String id;
+            private String nickname;
+            private String email;
+        }
+    }
+
+    /**
      * 회원가입 유무를 리턴할 응답(Response) 클래스
      */
     @Data
