@@ -238,6 +238,19 @@ public class AuthService {
     }
 
     /**
+     * 소셜 로그인
+     */
+    public AuthDTO.LoginResponse socialLogin(String registrationId, String code){
+        if(registrationId.equals("kakao")) {
+            String kakaoAccessToken = getKakaoAccessToken(code).getAccess_token();
+            return kakaoLogin(kakaoAccessToken);
+        }else {
+            String naverAccessToken = getNaverAccessToken(code).getAccess_token();
+            return naverLogin(naverAccessToken);
+        }
+    }
+
+    /**
      * 회원 가입
      */
     public Long save(UserDTO.Request dto) {
