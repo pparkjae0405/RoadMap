@@ -15,10 +15,9 @@ public class AuthController {
      * 소셜 로그인 ( GET /login/oauth2/code/{registrationId}?code={code} )
      */
     @GetMapping(value = "/login/oauth2/code/{registrationId}")
-    public ResponseEntity authLogin(@PathVariable String registrationId,
-                              @RequestParam("code") String code) {
-        String kakaoAccessToken = authService.getKakaoAccessToken(code).getAccess_token();
-        return ResponseEntity.ok(authService.kakaoLogin(kakaoAccessToken));
+    public ResponseEntity socialLogin(@PathVariable String registrationId,
+                                    @RequestParam("code") String code) {
+        return ResponseEntity.ok(authService.socialLogin(registrationId, code));
     }
 
     /**
