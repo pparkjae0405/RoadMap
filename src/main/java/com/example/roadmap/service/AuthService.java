@@ -1,17 +1,18 @@
 package com.example.roadmap.service;
 
+import com.example.roadmap.config.exception.CEmailLoginFailedException;
+import com.example.roadmap.domain.RefreshToken;
 import com.example.roadmap.domain.User;
 import com.example.roadmap.dto.AuthDTO;
+import com.example.roadmap.dto.TokenDTO;
 import com.example.roadmap.dto.UserDTO;
+import com.example.roadmap.repository.RefreshTokenRepository;
 import com.example.roadmap.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -21,6 +22,8 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor // final 혹은 @NotNull이 붙은 필드의 생성자를 자동으로 만들어준다
 public class AuthService {
     private final UserRepository userRepository;
+    private final RefreshTokenRepository tokenRepository;
+    private final SecurityService securityService;
 
     // 주요정보 분리(id, secret, uri)
     @Value("${kakao.client-id}")
@@ -110,32 +113,37 @@ public class AuthService {
     /**
      * 회원가입 유무를 판별할 메소드
      */
-    public AuthDTO.LoginResponse kakaoLogin(String kakaoAccessToken) {
+    public ResponseEntity<AuthDTO.LoginResponse> kakaoLogin(String kakaoAccessToken) {
         // kakaoAccessToken 으로 카카오 회원정보를 받아오고
         AuthDTO.KakaoAccountResponse kakaoAccountResponse = getKakaoInfo(kakaoAccessToken);
 
         // 회원가입 유무를 판별할 loginResponse를 선언하고
         AuthDTO.LoginResponse loginResponse = new AuthDTO.LoginResponse();
 
-        // 받아온 회원정보에서 email을 가져와 가입되어 있는지 확인하여
-        String kakaoEmail = kakaoAccountResponse.getKakao_account().getEmail();
-        if (userRepository.existsByEmail(kakaoEmail)) {
-            // 가입된 사용자라면 true + 해당 회원정보(UserDTO.Response로 매핑)
+        String email = kakaoAccountResponse.getKakao_account().getEmail();
+        try {
+            // 받아온 email로 로그인 성공
+            TokenDTO.Request tokenDto = securityService.login(email);
             loginResponse.setLoginSuccess(true);
-            UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(kakaoEmail));
+
+            // 회원정보를 받아와 UserDTO.Response 형태로 매핑하여 설정
+            UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(email)
+                    .orElseThrow(CEmailLoginFailedException::new));
             loginResponse.setUserResponse(userResponse);
-        }else {
-            // 가입되지 않은 사용자라면 false + 불러온 닉네임, 이메일을 UserDTO.Request로 빌드 후
+            HttpHeaders headers = setTokenHeaders(tokenDto);
+            return ResponseEntity.ok().headers(headers).body(loginResponse);
+        } catch(CEmailLoginFailedException e) {
+            // 로그인 실패(비회원)
+            // 받아온 회원정보를 UserDTO.Request로 빌드 후 UserDTO.Response로 매핑한 뒤 설정
             UserDTO.Request userRequest = UserDTO.Request.builder()
                     .nickName(kakaoAccountResponse.getKakao_account().getProfile().getNickname())
-                    .email(kakaoEmail)
+                    .email(kakaoAccountResponse.getKakao_account().getEmail())
                     .build();
-
-            // UserDTO.Response로 매핑
             UserDTO.Response userResponse = new UserDTO.Response(userRequest.toEntity());
             loginResponse.setUserResponse(userResponse);
+            loginResponse.setLoginSuccess(false);
+            return ResponseEntity.ok(loginResponse);
         }
-        return loginResponse;
     }
 
     /**
@@ -210,37 +218,61 @@ public class AuthService {
     /**
      * 회원가입 유무를 판별할 메소드
      */
-    public AuthDTO.LoginResponse naverLogin(String naverAccessToken) {
+    public ResponseEntity<AuthDTO.LoginResponse> naverLogin(String naverAccessToken) {
         // naverAccessToken 으로 네이버 회원정보를 받아오고
         AuthDTO.NaverAccountResponse naverAccountResponse = getNaverInfo(naverAccessToken);
+
         // 회원가입 유무를 판별할 loginResponse를 선언하고
         AuthDTO.LoginResponse loginResponse = new AuthDTO.LoginResponse();
 
-        // 받아온 회원정보에서 email을 가져와 가입되어 있는지 확인하여
-        String naverEmail = naverAccountResponse.getResponse().getEmail();
-        if (userRepository.existsByEmail(naverEmail)) {
-            // 가입된 사용자라면 true + 해당 회원정보(UserDTO.Response로 매핑)
+        String email = naverAccountResponse.getResponse().getEmail();
+        try {
+            // 받아온 email로 로그인 성공
+            TokenDTO.Request tokenDto = securityService.login(email);
             loginResponse.setLoginSuccess(true);
-            UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(naverEmail));
+
+            // 회원정보를 받아와 UserDTO.Response 형태로 매핑하여 설정
+            UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(email)
+                    .orElseThrow(CEmailLoginFailedException::new));
             loginResponse.setUserResponse(userResponse);
-        }else {
-            // 가입되지 않은 사용자라면 false + 불러온 닉네임, 이메일을 UserDTO.Request로 빌드 후
+            HttpHeaders headers = setTokenHeaders(tokenDto);
+            return ResponseEntity.ok().headers(headers).body(loginResponse);
+        } catch(CEmailLoginFailedException e) {
+            // 로그인 실패(비회원)
+            // 받아온 회원정보를 UserDTO.Request로 빌드 후 UserDTO.Response로 매핑한 뒤 설정
             UserDTO.Request userRequest = UserDTO.Request.builder()
                     .nickName(naverAccountResponse.getResponse().getNickname())
-                    .email(naverEmail)
+                    .email(naverAccountResponse.getResponse().getEmail())
                     .build();
-
-            // UserDTO.Response로 매핑
             UserDTO.Response userResponse = new UserDTO.Response(userRequest.toEntity());
             loginResponse.setUserResponse(userResponse);
+            loginResponse.setLoginSuccess(false);
+            return ResponseEntity.ok(loginResponse);
         }
-        return loginResponse;
+    }
+
+    /**
+     * 토큰을 헤더에 배치
+     */
+    public HttpHeaders setTokenHeaders(TokenDTO.Request tokenDto) {
+        HttpHeaders headers = new HttpHeaders();
+        ResponseCookie cookie = ResponseCookie.from("RefreshToken", tokenDto.getRefreshToken())
+                .path("/")
+                .maxAge(60*60*24*7) // 쿠키 유효기간 7일로 설정했음
+                .secure(true)
+                .sameSite("None")
+                .httpOnly(true)
+                .build();
+        headers.add("Set-cookie", cookie.toString());
+        headers.add("Authorization", tokenDto.getAccessToken());
+
+        return headers;
     }
 
     /**
      * 소셜 로그인
      */
-    public AuthDTO.LoginResponse socialLogin(String registrationId, String code){
+    public ResponseEntity<AuthDTO.LoginResponse> socialLogin(String registrationId, String code){
         if(registrationId.equals("kakao")) {
             String kakaoAccessToken = getKakaoAccessToken(code).getAccess_token();
             return kakaoLogin(kakaoAccessToken);
@@ -251,13 +283,37 @@ public class AuthService {
     }
 
     /**
+     * Refresh Token 을 Repository 에 저장하는 메소드
+     */
+    public void saveRefreshToken(User user, TokenDTO.Request tokenDto) {
+        RefreshToken refreshToken = RefreshToken.builder()
+                .key(user.getUserId())
+                .token(tokenDto.getRefreshToken())
+                .build();
+        tokenRepository.save(refreshToken);
+        System.out.println("토큰 저장이 완료되었습니다");
+    }
+
+    /**
      * 회원 가입
      */
-    public Long save(UserDTO.Request dto) {
+    public ResponseEntity<AuthDTO.SignupResponse> save(UserDTO.Request dto) {
         // 넘어온 dto를 엔티티로 바꿔 User에 저장
         User user = dto.toEntity();
         userRepository.save(user);
 
-        return user.getUserId();
+        // 회원가입 상황에 대해 토큰을 발급하고 헤더와 쿠키에 배치
+        TokenDTO.Request tokenDto = securityService.signup(dto);
+        saveRefreshToken(user, tokenDto);
+        HttpHeaders headers = setTokenHeaders(tokenDto);
+
+        // 응답 작성
+        AuthDTO.SignupResponse responseDto = new AuthDTO.SignupResponse();
+        // 회원정보를 받아와 UserDTO.Response 형태로 매핑하여 설정
+        UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(CEmailLoginFailedException::new));
+        responseDto.setUserResponse(userResponse);
+        responseDto.setSignUpSuccess(true);
+        return ResponseEntity.ok().headers(headers).body(responseDto);
     }
 }

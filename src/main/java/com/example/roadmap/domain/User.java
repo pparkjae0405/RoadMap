@@ -26,7 +26,7 @@ public class User {
     private Long userId;
 
     /**
-     * 닉네임, 이메일, 직무
+     * 닉네임, 이메일, 직무, 권한
      */
     @Column(name = "nickName", nullable = false)
     private String nickName;
@@ -36,6 +36,10 @@ public class User {
 
     @Column
     private String major;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 
     /**
      * User는 Roadmap, Comment와 일대다 연관관계를 가짐

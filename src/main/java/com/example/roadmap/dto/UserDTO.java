@@ -1,5 +1,6 @@
 package com.example.roadmap.dto;
 
+import com.example.roadmap.domain.Authority;
 import com.example.roadmap.domain.User;
 import lombok.*;
 
@@ -16,6 +17,7 @@ public class UserDTO {
         private String nickName;
         private String email;
         private String major;
+        private Authority authority;
 
         /* Dto -> Entity */
         public User toEntity(){
@@ -24,6 +26,7 @@ public class UserDTO {
                     .nickName(nickName)
                     .email(email)
                     .major(major)
+                    .authority(Authority.ROLE_USER)
                     .build();
 
             return user;
@@ -38,13 +41,11 @@ public class UserDTO {
     @Getter
     @RequiredArgsConstructor
     public static class Response {
-        private Long userId;
         private String nickName;
         private String email;
         private String major;
 
         public Response(User user){
-            this.userId = user.getUserId();
             this.nickName = user.getNickName();
             this.email = user.getEmail();
             this.major = user.getMajor();
