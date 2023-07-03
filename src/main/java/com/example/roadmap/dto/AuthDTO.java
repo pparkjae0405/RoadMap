@@ -91,4 +91,16 @@ public class AuthDTO {
         private boolean loginSuccess;
         private UserDTO.Response userResponse;
     }
+
+    /**
+     * 회원가입 결과를 리턴할 응답(Response) 클래스
+     */
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class SignupResponse {
+        private boolean signUpSuccess;
+        private UserDTO.Response userResponse;
+    }
 }
