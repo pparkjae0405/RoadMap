@@ -5,6 +5,7 @@ import com.example.roadmap.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -32,9 +33,10 @@ public class SecurityConfig {
 
                 // 접근 권한 설정부
                 .and().authorizeRequests()
-                .requestMatchers("/").permitAll()
-                .requestMatchers("/user").hasRole("USER")
-                .anyRequest().permitAll() // or authenticated()
+                .requestMatchers(HttpMethod.GET, "/", "/tour/**", "/main/**").permitAll() // tour, main uri get요청 허용
+                .requestMatchers("/login/**", "/signup").permitAll() // login, signup uri 접근 허용
+                .requestMatchers("/user/**").hasRole("USER") // 해당 uri는 USER 역할이여야 함
+                .anyRequest().authenticated() // 이외의 요청은 인증되어야 함
 
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
