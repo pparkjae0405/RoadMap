@@ -9,8 +9,6 @@ import com.example.roadmap.dto.UserDTO;
 import com.example.roadmap.repository.RefreshTokenRepository;
 import com.example.roadmap.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**

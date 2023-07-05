@@ -150,6 +150,7 @@ public class RoadmapService {
     /**
      * 메인 페이지 최신순 조회
      */
+    @Transactional
     public List<RoadmapDTO.MainRecentResponse> readMainRecent(){
         // 한번에 불러올 페이지 수(5개)만큼 PageRequest를 만듬
         PageRequest pageRequest = PageRequest.of(0, 5);
@@ -169,6 +170,7 @@ public class RoadmapService {
     /**
      * 메인 페이지 탑10북 조회
      */
+    @Transactional
     public List<RoadmapDTO.MainTopbookResponse> readMainTopbook(){
         // 한번에 불러올 페이지 수(10개)만큼 PageRequest를 만듬
         PageRequest pageRequest = PageRequest.of(0, 10);
