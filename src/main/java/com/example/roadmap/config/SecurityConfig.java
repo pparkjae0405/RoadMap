@@ -28,7 +28,10 @@ public class SecurityConfig {
         http
                 .httpBasic().disable()
                 .csrf().disable()
+                .cors() // CORS 에러 방지
+
                 // 세션을 사용하지 않을거라 세션 설정을 Stateless 로 설정
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 // 접근 권한 설정부

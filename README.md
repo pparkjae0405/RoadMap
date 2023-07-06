@@ -15,7 +15,7 @@
     
   - Back End - [`박재민`](https://github.com/pparkjae0405), [`신성철`](https://github.com/ShinSeongCheol)
     - Java 17 
-    - SpringBoot 3.0.6, Spring Data JPA, MySQL, AWS(예정)
+    - SpringBoot 3.0.6, Spring Data JPA, Spring Security, MySQL
 
 <br>
 
