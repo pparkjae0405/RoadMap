@@ -26,7 +26,7 @@ public class UserService {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // 사용자의 이메일을 가져온 뒤
-        org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) principal;
+        org.springframework.security.core.userdetails.User customUser = (org.springframework.security.core.userdetails.User) principal;
         String email = ((User) principal).getUsername();
 
         // 회원정보를 받아와 UserDTO.Response 형태로 매핑하여 설정
@@ -34,5 +34,27 @@ public class UserService {
                 .orElseThrow(CEmailLoginFailedException::new));
 
         return userResponse;
+    }
+
+    /**
+     * 회원정보 수정
+     */
+    @Transactional
+    public Long update(UserDTO.Request dto) {
+        // 현재 사용자의 인증 정보를 가져온다.
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // 사용자의 이메일을 가져온 뒤
+        org.springframework.security.core.userdetails.User customUser = (org.springframework.security.core.userdetails.User) principal;
+        String email = ((User) principal).getUsername();
+
+        // 해당하는 회원 정보를 받아와
+        com.example.roadmap.domain.User user = userRepository.findByEmail(email)
+                .orElseThrow(CEmailLoginFailedException::new);
+
+        // 넘어온 dto를 통해 해당 User의 nickName과 major를 수정하고 회원id를 리턴한다.
+        user.update(dto.getNickName(), dto.getMajor());
+
+        return user.getUserId();
     }
 }

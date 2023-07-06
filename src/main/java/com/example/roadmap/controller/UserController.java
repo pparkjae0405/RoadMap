@@ -1,8 +1,7 @@
 package com.example.roadmap.controller;
 
+import com.example.roadmap.dto.UserDTO;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import com.example.roadmap.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +20,11 @@ public class UserController {
     }
 
     /**
-     * 직무 수정
+     * 회원정보 수정 ( PUT /user/profile )
      */
-    @PutMapping(value = "/user/{userId}/info")
-    public String editMyInfo(@PathVariable long userId) {
-        return "";
+    @PutMapping("/user/profile")
+    public ResponseEntity update(@RequestBody UserDTO.Request dto) {
+        return ResponseEntity.ok(userService.update(dto));
     }
 
     /**
