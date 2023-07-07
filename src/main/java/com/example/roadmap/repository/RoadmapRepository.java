@@ -1,6 +1,7 @@
 package com.example.roadmap.repository;
 
 import com.example.roadmap.domain.Roadmap;
+import com.example.roadmap.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -49,4 +50,9 @@ public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
     // roadmapId에 해당하는 Roadmap의 view를 1 증가시킨다.
     @Query("update Roadmap r set r.view = r.view + 1 where r.roadmapId = :roadmapId")
     int increaseView(@Param("roadmapId") Long roadmapId);
+
+    /**
+     * 활동내역 조회
+     */
+    Page<Roadmap> findAllByUserOrderByRoadmapIdDesc(User user, PageRequest pageRequest);
 }

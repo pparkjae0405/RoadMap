@@ -1,6 +1,7 @@
 package com.example.roadmap.dto;
 
 import com.example.roadmap.domain.Roadmap;
+import com.example.roadmap.domain.User;
 import lombok.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class RoadmapDTO {
         private int view;
         private String title;
         private String content;
+        private User user;
 
         /* Dto -> Entity */
         public Roadmap toEntity() {
@@ -27,6 +29,7 @@ public class RoadmapDTO {
                     .view(0)
                     .title(title)
                     .content(content)
+                    .user(user)
                     .build();
 
             return roadmap;
@@ -173,5 +176,38 @@ public class RoadmapDTO {
         public MainTopbookResponse(Roadmap roadmap){
             this.title = roadmap.getInfos().get(0).getTitle();
         }
+    }
+
+    /**
+     * 활동내역 조회 정보를 리턴할 응답(Response) 클래스
+     */
+    @Getter
+    @RequiredArgsConstructor
+    public static class ActivityResponse {
+        private Long roadmapId;
+        private String date;
+        private int view;
+        private String title;
+        private int commentCount;
+
+        public ActivityResponse(Roadmap roadmap){
+            this.roadmapId = roadmap.getRoadmapId();
+            this.date = roadmap.getDate();
+            this.view = roadmap.getView();
+            this.title = roadmap.getTitle();
+            this.commentCount = roadmap.getComments().size();
+        }
+    }
+
+    /**
+     * 활동내역 조회 결과를 리턴할 응답(Response) 클래스
+     */
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ActivityResultResponse {
+        private int totalPage;
+        private List<RoadmapDTO.ActivityResponse> activityResponse;
     }
 }
