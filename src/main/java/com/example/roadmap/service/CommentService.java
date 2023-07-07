@@ -1,11 +1,15 @@
 package com.example.roadmap.service;
 
+import com.example.roadmap.config.exception.CEmailLoginFailedException;
 import com.example.roadmap.domain.Comment;
 import com.example.roadmap.domain.Roadmap;
 import com.example.roadmap.dto.CommentDTO;
 import com.example.roadmap.repository.CommentRepository;
 import com.example.roadmap.repository.RoadmapRepository;
+import com.example.roadmap.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final RoadmapRepository roadmapRepository;
+    private final UserRepository userRepository;
 
     /**
      * 댓글 작성
@@ -25,6 +30,21 @@ public class CommentService {
                 new IllegalArgumentException("댓글 쓰기 실패: 해당 게시글이 존재하지 않습니다. " + roadmapId));
         // dto의 roadmap을 설정한 다음
         dto.setRoadmap(roadmap);
+
+        // 현재 사용자의 인증 정보를 가져와
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // 사용자의 이메일을 가져온 뒤
+        org.springframework.security.core.userdetails.User customUser = (org.springframework.security.core.userdetails.User) principal;
+        String email = ((User) principal).getUsername();
+
+        // 해당하는 회원 정보를 받아와
+        com.example.roadmap.domain.User user = userRepository.findByEmail(email)
+                .orElseThrow(CEmailLoginFailedException::new);
+
+        // dto의 user를 설정한 다음
+        dto.setUser(user);
+
         // dto를 엔티티로 바꿔 comment에 저장
         Comment comment = dto.toEntity();
         commentRepository.save(comment);

@@ -2,6 +2,7 @@ package com.example.roadmap.dto;
 
 import com.example.roadmap.domain.Comment;
 import com.example.roadmap.domain.Roadmap;
+import com.example.roadmap.domain.User;
 import lombok.*;
 
 public class CommentDTO {
@@ -16,6 +17,7 @@ public class CommentDTO {
         private Long commentId;
         private String content;
         private Roadmap roadmap;
+        private User user;
 
         /* Dto -> Entity */
         public Comment toEntity() {
@@ -23,6 +25,7 @@ public class CommentDTO {
                     .commentId(commentId)
                     .content(content)
                     .roadmap(roadmap)
+                    .user(user)
                     .build();
 
             return comments;

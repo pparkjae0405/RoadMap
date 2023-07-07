@@ -30,7 +30,7 @@ public class Comment extends BaseTime{
     private String content;
 
     /**
-     * 글 번호(FK)
+     * 글 번호, 회원 번호(FK)
      */
     // ManyToOne의 기본값은 EAGER이기에 LAZY로 변경
     @ManyToOne(fetch = FetchType.LAZY)
