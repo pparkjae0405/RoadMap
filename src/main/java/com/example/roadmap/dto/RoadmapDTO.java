@@ -1,6 +1,7 @@
 package com.example.roadmap.dto;
 
 import com.example.roadmap.domain.Roadmap;
+import com.example.roadmap.domain.User;
 import lombok.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class RoadmapDTO {
         private int view;
         private String title;
         private String content;
+        private User user;
 
         /* Dto -> Entity */
         public Roadmap toEntity() {
@@ -27,6 +29,7 @@ public class RoadmapDTO {
                     .view(0)
                     .title(title)
                     .content(content)
+                    .user(user)
                     .build();
 
             return roadmap;

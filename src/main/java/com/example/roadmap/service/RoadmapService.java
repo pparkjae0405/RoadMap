@@ -1,11 +1,16 @@
 package com.example.roadmap.service;
 
+import com.example.roadmap.config.exception.CEmailLoginFailedException;
 import com.example.roadmap.domain.Roadmap;
 import com.example.roadmap.dto.RoadmapDTO;
+import com.example.roadmap.dto.UserDTO;
 import com.example.roadmap.repository.RoadmapRepository;
+import com.example.roadmap.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +21,28 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor // final 혹은 @NotNull이 붙은 필드의 생성자를 자동으로 만들어준다
 public class RoadmapService {
     private final RoadmapRepository roadmapRepository;
+    private final UserRepository userRepository;
 
     /**
      * 글 작성
      */
     @Transactional
     public Long save(RoadmapDTO.Request dto) {
-        // 넘어온 dto를 엔티티로 바꿔 roadmap에 저장
+        // 현재 사용자의 인증 정보를 가져와
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // 사용자의 이메일을 가져온 뒤
+        org.springframework.security.core.userdetails.User customUser = (org.springframework.security.core.userdetails.User) principal;
+        String email = ((User) principal).getUsername();
+
+        // 해당하는 회원 정보를 받아와
+        com.example.roadmap.domain.User user = userRepository.findByEmail(email)
+            .orElseThrow(CEmailLoginFailedException::new);
+
+        // dto의 user를 설정한 다음
+        dto.setUser(user);
+
+        // dto를 엔티티로 바꿔 roadmap에 저장
         Roadmap roadmap = dto.toEntity();
         roadmapRepository.save(roadmap);
 
