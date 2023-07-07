@@ -177,4 +177,37 @@ public class RoadmapDTO {
             this.title = roadmap.getInfos().get(0).getTitle();
         }
     }
+
+    /**
+     * 활동내역 조회 정보를 리턴할 응답(Response) 클래스
+     */
+    @Getter
+    @RequiredArgsConstructor
+    public static class ActivityResponse {
+        private Long roadmapId;
+        private String date;
+        private int view;
+        private String title;
+        private int commentCount;
+
+        public ActivityResponse(Roadmap roadmap){
+            this.roadmapId = roadmap.getRoadmapId();
+            this.date = roadmap.getDate();
+            this.view = roadmap.getView();
+            this.title = roadmap.getTitle();
+            this.commentCount = roadmap.getComments().size();
+        }
+    }
+
+    /**
+     * 활동내역 조회 결과를 리턴할 응답(Response) 클래스
+     */
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ActivityResultResponse {
+        private int totalPage;
+        private List<RoadmapDTO.ActivityResponse> activityResponse;
+    }
 }

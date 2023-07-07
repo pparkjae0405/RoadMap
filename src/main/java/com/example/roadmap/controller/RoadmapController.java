@@ -14,7 +14,7 @@ public class RoadmapController {
     /**
      * 글 쓰기 ( POST /tour/write )
      */
-    @PostMapping("/tour/write")
+    @PostMapping(value = "/tour/write")
     public ResponseEntity save(@RequestBody RoadmapDTO.Request dto) {
         return ResponseEntity.ok(roadmapService.save(dto));
     }
@@ -22,7 +22,7 @@ public class RoadmapController {
     /**
      * 글 조회 ( GET /tour/{roadmapId} )
      */
-    @GetMapping("/tour/{roadmapId}")
+    @GetMapping(value = "/tour/{roadmapId}")
     public ResponseEntity read(@PathVariable Long roadmapId) {
         return ResponseEntity.ok(roadmapService.findById(roadmapId));
     }
@@ -30,7 +30,7 @@ public class RoadmapController {
     /**
      * 글 수정 ( PUT /tour/{roadmapId} )
      */
-    @PutMapping("/tour/{roadmapId}")
+    @PutMapping(value = "/tour/{roadmapId}")
     public ResponseEntity update(@PathVariable Long roadmapId, @RequestBody RoadmapDTO.Request dto) {
         roadmapService.update(roadmapId, dto);
         return ResponseEntity.ok(roadmapId);
@@ -39,7 +39,7 @@ public class RoadmapController {
     /**
      * 글 삭제 ( DELETE /tour/{roadmapId} )
      */
-    @DeleteMapping("/tour/{roadmapId}")
+    @DeleteMapping(value = "/tour/{roadmapId}")
     public ResponseEntity delete(@PathVariable Long roadmapId) {
         roadmapService.delete(roadmapId);
         return ResponseEntity.ok(roadmapId);
@@ -48,7 +48,7 @@ public class RoadmapController {
     /**
      * Tour 페이지 조회 ( GET /tour/list?cursor={cursor} )
      */
-    @GetMapping("/tour/list")
+    @GetMapping(value = "/tour/list")
     public ResponseEntity readTour(@RequestParam(value = "cursor", required = false) Long cursor){
         return ResponseEntity.ok(roadmapService.readTour(cursor));
     }
@@ -56,7 +56,7 @@ public class RoadmapController {
     /**
      * 검색 결과 조회 ( GET /tour/find?keyword={keyword}&cursor={cursor} )
      */
-    @GetMapping("/tour/find")
+    @GetMapping(value = "/tour/find")
     public ResponseEntity readFind(@RequestParam(value = "keyword", required = false) String keyword,
                                    @RequestParam(value = "cursor", required = false) Long cursor){
         return ResponseEntity.ok(roadmapService.readFind(keyword, cursor));
@@ -65,7 +65,7 @@ public class RoadmapController {
     /**
      * 메인 페이지 조회순 조회 ( GET /main/popular )
      */
-    @GetMapping("/main/popular")
+    @GetMapping(value = "/main/popular")
     public ResponseEntity readMainPopular(){
         return ResponseEntity.ok(roadmapService.readMainPopular());
     }
@@ -73,7 +73,7 @@ public class RoadmapController {
     /**
      * 메인 페이지 최신순 조회 ( GET /main/recent )
      */
-    @GetMapping("/main/recent")
+    @GetMapping(value = "/main/recent")
     public ResponseEntity readMainRecent(){
         return ResponseEntity.ok(roadmapService.readMainRecent());
     }
@@ -81,7 +81,7 @@ public class RoadmapController {
     /**
      * 메인 페이지 탑10북 조회 ( GET /main/topbook )
      */
-    @GetMapping("/main/topbook")
+    @GetMapping(value = "/main/topbook")
     public ResponseEntity readMainTopbook(){
         return ResponseEntity.ok(roadmapService.readMainTopbook());
     }

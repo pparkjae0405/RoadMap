@@ -22,17 +22,16 @@ public class UserController {
     /**
      * 회원정보 수정 ( PUT /user/profile )
      */
-    @PutMapping("/user/profile")
+    @PutMapping(value = "/user/profile")
     public ResponseEntity update(@RequestBody UserDTO.Request dto) {
         return ResponseEntity.ok(userService.update(dto));
     }
 
     /**
-     * 활동내역 조회
+     * 활동내역 조회 ( GET /user/activity?page={page} )
      */
-    @GetMapping(value = "/user/{userId}/activity")
-    public String viewActivityHistory(@PathVariable long userId) {
-        return "";
+    @GetMapping(value = "/user/activity")
+    public ResponseEntity readActivity(@RequestParam(value = "page", required = false, defaultValue = "0") int page) {
+        return ResponseEntity.ok(userService.readActivity(page));
     }
-
 }
