@@ -62,12 +62,20 @@ public class CommentService {
      * 댓글 수정
      */
     @Transactional
-    public void update(Long commentId, CommentDTO.Request dto) {
+    public CommentDTO.ResultResponse update(Long commentId, CommentDTO.Request dto) {
+        // 수행 결과를 리턴할 CommentDTO.ResultResponse 선언
+        CommentDTO.ResultResponse resultResponse = new CommentDTO.ResultResponse();
+
         // 넘어온 commentId와 dto를 통해 comment의 content를 수정
         Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
                 new IllegalArgumentException("해당 댓글이 존재하지 않습니다. commentId=" + commentId));
         //
         comment.update(dto.getContent());
+
+        // 성공하면 success를 true로 설정하여 리턴
+        resultResponse.setSuccess(true);
+
+        return resultResponse;
     }
 
     /**

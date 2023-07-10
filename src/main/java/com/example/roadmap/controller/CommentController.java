@@ -25,8 +25,7 @@ public class CommentController {
      */
     @PutMapping({"/{roadmapId}/comment/{commentId}"})
     public ResponseEntity update(@PathVariable Long commentId, @RequestBody CommentDTO.Request dto) {
-        commentService.update(commentId, dto);
-        return ResponseEntity.ok(commentId);
+        return ResponseEntity.ok(commentService.update(commentId, dto));
     }
 
     /**
