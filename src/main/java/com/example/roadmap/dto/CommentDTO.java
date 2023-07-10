@@ -41,12 +41,14 @@ public class CommentDTO {
     @RequiredArgsConstructor
     public static class Response {
         private Long commentId;
+        private String nickName;
         private String date;
         private String content;
 
         /* Entity -> Dto*/
         public Response(Comment comment) {
             this.commentId = comment.getCommentId();
+            this.nickName = comment.getUser().getNickName();
             this.date = comment.getDate();
             this.content = comment.getContent();
         }
