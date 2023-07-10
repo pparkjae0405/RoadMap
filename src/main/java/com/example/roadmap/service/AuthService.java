@@ -313,7 +313,7 @@ public class AuthService {
         UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(CEmailLoginFailedException::new));
         responseDto.setUserResponse(userResponse);
-        responseDto.setSignUpSuccess(true);
+        responseDto.setSuccess(true);
         return ResponseEntity.ok().headers(headers).body(responseDto);
     }
 }
