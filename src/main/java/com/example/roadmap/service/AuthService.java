@@ -124,7 +124,7 @@ public class AuthService {
         try {
             // 받아온 email로 로그인 성공
             TokenDTO.Request tokenDto = securityService.login(email);
-            loginResponse.setLoginSuccess(true);
+            loginResponse.setSuccess(true);
 
             // 회원정보를 받아와 UserDTO.Response 형태로 매핑하여 설정
             UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(email)
@@ -141,7 +141,7 @@ public class AuthService {
                     .build();
             UserDTO.Response userResponse = new UserDTO.Response(userRequest.toEntity());
             loginResponse.setUserResponse(userResponse);
-            loginResponse.setLoginSuccess(false);
+            loginResponse.setSuccess(false);
             return ResponseEntity.ok(loginResponse);
         }
     }
@@ -229,7 +229,7 @@ public class AuthService {
         try {
             // 받아온 email로 로그인 성공
             TokenDTO.Request tokenDto = securityService.login(email);
-            loginResponse.setLoginSuccess(true);
+            loginResponse.setSuccess(true);
 
             // 회원정보를 받아와 UserDTO.Response 형태로 매핑하여 설정
             UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(email)
@@ -246,7 +246,7 @@ public class AuthService {
                     .build();
             UserDTO.Response userResponse = new UserDTO.Response(userRequest.toEntity());
             loginResponse.setUserResponse(userResponse);
-            loginResponse.setLoginSuccess(false);
+            loginResponse.setSuccess(false);
             return ResponseEntity.ok(loginResponse);
         }
     }
@@ -313,7 +313,7 @@ public class AuthService {
         UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(CEmailLoginFailedException::new));
         responseDto.setUserResponse(userResponse);
-        responseDto.setSignUpSuccess(true);
+        responseDto.setSuccess(true);
         return ResponseEntity.ok().headers(headers).body(responseDto);
     }
 }

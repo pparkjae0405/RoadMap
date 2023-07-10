@@ -27,7 +27,6 @@ public class TagController {
      */
     @DeleteMapping("/{roadmapId}/tag")
     public ResponseEntity delete(@PathVariable Long roadmapId) {
-        tagService.delete(roadmapId);
-        return ResponseEntity.ok(roadmapId);
+        return ResponseEntity.ok(tagService.delete(roadmapId));
     }
 }

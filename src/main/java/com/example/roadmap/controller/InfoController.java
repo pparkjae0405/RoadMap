@@ -27,7 +27,6 @@ public class InfoController {
      */
     @DeleteMapping("/{roadmapId}/info")
     public ResponseEntity delete(@PathVariable Long roadmapId) {
-        infoService.delete(roadmapId);
-        return ResponseEntity.ok(roadmapId);
+        return ResponseEntity.ok(infoService.delete(roadmapId));
     }
 }

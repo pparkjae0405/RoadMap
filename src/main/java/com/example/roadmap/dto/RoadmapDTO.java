@@ -45,6 +45,7 @@ public class RoadmapDTO {
     @RequiredArgsConstructor
     public static class Response{
         private Long roadmapId;
+        private String nickName;
         private String date;
         private int view;
         private String title;
@@ -56,6 +57,7 @@ public class RoadmapDTO {
         /* Entity -> Dto*/
         public Response(Roadmap roadmap) {
             this.roadmapId = roadmap.getRoadmapId();
+            this.nickName = roadmap.getUser().getNickName();
             this.date = roadmap.getDate();
             this.view = roadmap.getView();
             this.title = roadmap.getTitle();
@@ -88,6 +90,7 @@ public class RoadmapDTO {
     @RequiredArgsConstructor
     public static class TourResponse{
         private Long roadmapId;
+        private String nickName;
         private String date;
         private int view;
         private String title;
@@ -95,6 +98,7 @@ public class RoadmapDTO {
 
         public TourResponse(Roadmap roadmap){
             this.roadmapId = roadmap.getRoadmapId();
+            this.nickName = roadmap.getUser().getNickName();
             this.date = roadmap.getDate();
             this.view = roadmap.getView();
             this.title = roadmap.getTitle();
@@ -109,6 +113,7 @@ public class RoadmapDTO {
     @RequiredArgsConstructor
     public static class FindResponse{
         private Long roadmapId;
+        private String nickName;
         private String date;
         private int view;
         private String title;
@@ -116,6 +121,7 @@ public class RoadmapDTO {
 
         public FindResponse(Roadmap roadmap){
             this.roadmapId = roadmap.getRoadmapId();
+            this.nickName = roadmap.getUser().getNickName();
             this.date = roadmap.getDate();
             this.view = roadmap.getView();
             this.title = roadmap.getTitle();
@@ -130,6 +136,7 @@ public class RoadmapDTO {
     @RequiredArgsConstructor
     public static class MainPopularResponse{
         private Long roadmapId;
+        private String nickName;
         private String date;
         private int view;
         private String title;
@@ -137,6 +144,7 @@ public class RoadmapDTO {
 
         public MainPopularResponse(Roadmap roadmap){
             this.roadmapId = roadmap.getRoadmapId();
+            this.nickName = roadmap.getUser().getNickName();
             this.date = roadmap.getDate();
             this.view = roadmap.getView();
             this.title = roadmap.getTitle();
@@ -151,6 +159,7 @@ public class RoadmapDTO {
     @RequiredArgsConstructor
     public static class MainRecentResponse{
         private Long roadmapId;
+        private String nickName;
         private String date;
         private int view;
         private String title;
@@ -158,6 +167,7 @@ public class RoadmapDTO {
 
         public MainRecentResponse(Roadmap roadmap){
             this.roadmapId = roadmap.getRoadmapId();
+            this.nickName = roadmap.getUser().getNickName();
             this.date = roadmap.getDate();
             this.view = roadmap.getView();
             this.title = roadmap.getTitle();
@@ -185,6 +195,7 @@ public class RoadmapDTO {
     @RequiredArgsConstructor
     public static class ActivityResponse {
         private Long roadmapId;
+        private String nickName;
         private String date;
         private int view;
         private String title;
@@ -192,6 +203,7 @@ public class RoadmapDTO {
 
         public ActivityResponse(Roadmap roadmap){
             this.roadmapId = roadmap.getRoadmapId();
+            this.nickName = roadmap.getUser().getNickName();
             this.date = roadmap.getDate();
             this.view = roadmap.getView();
             this.title = roadmap.getTitle();
@@ -209,5 +221,16 @@ public class RoadmapDTO {
     public static class ActivityResultResponse {
         private int totalPage;
         private List<RoadmapDTO.ActivityResponse> activityResponse;
+    }
+
+    /**
+     * 기본 수행 결과를 리턴할 응답(Response) 클래스
+     */
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResultResponse {
+        private boolean success;
     }
 }

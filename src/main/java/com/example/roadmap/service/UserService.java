@@ -16,7 +16,6 @@ import com.example.roadmap.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +49,10 @@ public class UserService {
      * 회원정보 수정
      */
     @Transactional
-    public Long update(UserDTO.Request dto) {
+    public UserDTO.ResultResponse update(UserDTO.Request dto) {
+        // 수행 결과를 리턴할 UserDTO.ResultResponse 선언
+        UserDTO.ResultResponse resultResponse = new UserDTO.ResultResponse();
+
         // 현재 사용자의 인증 정보를 가져온다.
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -62,10 +64,13 @@ public class UserService {
         com.example.roadmap.domain.User user = userRepository.findByEmail(email)
                 .orElseThrow(CEmailLoginFailedException::new);
 
-        // 넘어온 dto를 통해 해당 User의 nickName과 major를 수정하고 회원id를 리턴한다.
+        // 넘어온 dto를 통해 해당 User의 nickName과 major를 수정하고
         user.update(dto.getNickName(), dto.getMajor());
 
-        return user.getUserId();
+        // 성공하면 success를 true로 설정하여 리턴
+        resultResponse.setSuccess(true);
+
+        return resultResponse;
     }
 
     /**

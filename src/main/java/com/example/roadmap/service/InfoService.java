@@ -21,7 +21,10 @@ public class InfoService {
      * 로드맵 작성
      */
     @Transactional
-    public Long save(Long roadmapId, List<InfoDTO.Request> dto) {
+    public InfoDTO.ResultResponse save(Long roadmapId, List<InfoDTO.Request> dto) {
+        // 수행 결과를 리턴할 InfoDTO.ResultResponse 선언
+        InfoDTO.ResultResponse resultResponse = new InfoDTO.ResultResponse();
+
         // 넘어온 roadmapId를 통해 roadmap을 불러오고
         Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow(() ->
                 new IllegalArgumentException("로드맵 쓰기 실패: 해당 게시글이 존재하지 않습니다. " + roadmapId));
@@ -39,15 +42,20 @@ public class InfoService {
             infoRepository.save(info);
         }
 
-        // 로드맵을 전부 저장했다면 로드맵을 저장한 글 번호를 리턴
-        return roadmap.getRoadmapId();
+        // 로드맵을 전부 저장했다면 success를 true로 설정하여 리턴
+        resultResponse.setSuccess(true);
+
+        return resultResponse;
     }
 
     /**
      * 로드맵 삭제
      */
     @Transactional
-    public void delete(Long roadmapId) {
+    public InfoDTO.ResultResponse delete(Long roadmapId) {
+        // 수행 결과를 리턴할 InfoDTO.ResultResponse 선언
+        InfoDTO.ResultResponse resultResponse = new InfoDTO.ResultResponse();
+
         // findByRoadmap_RoadmapId를 호출하여 넘어온 roadmapId에 해당하는 info 리스트를 찾아
         List<Info> infos = infoRepository.findByRoadmap_RoadmapId(roadmapId);
 
@@ -55,5 +63,10 @@ public class InfoService {
         for(int i = 0 ; i < infos.size() ; i++){
             infoRepository.delete(infos.get(i));
         }
+
+        // 로드맵을 전부 삭제했다면 success를 true로 설정하여 리턴
+        resultResponse.setSuccess(true);
+
+        return resultResponse;
     }
 }

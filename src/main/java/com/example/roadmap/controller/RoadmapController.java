@@ -32,8 +32,7 @@ public class RoadmapController {
      */
     @PutMapping(value = "/tour/{roadmapId}")
     public ResponseEntity update(@PathVariable Long roadmapId, @RequestBody RoadmapDTO.Request dto) {
-        roadmapService.update(roadmapId, dto);
-        return ResponseEntity.ok(roadmapId);
+        return ResponseEntity.ok(roadmapService.update(roadmapId, dto));
     }
 
     /**
@@ -41,8 +40,7 @@ public class RoadmapController {
      */
     @DeleteMapping(value = "/tour/{roadmapId}")
     public ResponseEntity delete(@PathVariable Long roadmapId) {
-        roadmapService.delete(roadmapId);
-        return ResponseEntity.ok(roadmapId);
+        return ResponseEntity.ok(roadmapService.delete(roadmapId));
     }
 
     /**

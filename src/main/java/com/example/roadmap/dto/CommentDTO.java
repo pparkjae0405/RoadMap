@@ -41,14 +41,27 @@ public class CommentDTO {
     @RequiredArgsConstructor
     public static class Response {
         private Long commentId;
+        private String nickName;
         private String date;
         private String content;
 
         /* Entity -> Dto*/
         public Response(Comment comment) {
             this.commentId = comment.getCommentId();
+            this.nickName = comment.getUser().getNickName();
             this.date = comment.getDate();
             this.content = comment.getContent();
         }
+    }
+
+    /**
+     * 기본 수행 결과를 리턴할 응답(Response) 클래스
+     */
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResultResponse {
+        private boolean success;
     }
 }

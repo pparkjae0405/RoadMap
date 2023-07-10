@@ -3,7 +3,6 @@ package com.example.roadmap.service;
 import com.example.roadmap.config.exception.CEmailLoginFailedException;
 import com.example.roadmap.domain.Roadmap;
 import com.example.roadmap.dto.RoadmapDTO;
-import com.example.roadmap.dto.UserDTO;
 import com.example.roadmap.repository.RoadmapRepository;
 import com.example.roadmap.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,10 @@ public class RoadmapService {
      * 글 작성
      */
     @Transactional
-    public Long save(RoadmapDTO.Request dto) {
+    public RoadmapDTO.ResultResponse save(RoadmapDTO.Request dto) {
+        // 수행 결과를 리턴할 RoadmapDTO.ResultResponse 선언
+        RoadmapDTO.ResultResponse resultResponse = new RoadmapDTO.ResultResponse();
+
         // 현재 사용자의 인증 정보를 가져와
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -46,7 +48,10 @@ public class RoadmapService {
         Roadmap roadmap = dto.toEntity();
         roadmapRepository.save(roadmap);
 
-        return roadmap.getRoadmapId();
+        // 성공하면 success를 true로 설정하여 리턴
+        resultResponse.setSuccess(true);
+
+        return resultResponse;
     }
 
     /**
@@ -69,24 +74,40 @@ public class RoadmapService {
      * 글 수정
      */
     @Transactional
-    public void update(Long roadmapId, RoadmapDTO.Request dto) {
+    public RoadmapDTO.ResultResponse update(Long roadmapId, RoadmapDTO.Request dto) {
+        // 수행 결과를 리턴할 RoadmapDTO.ResultResponse 선언
+        RoadmapDTO.ResultResponse resultResponse = new RoadmapDTO.ResultResponse();
+
         // 넘어온 roadmapId와 dto를 통해 해당 roadmap의 title과 content를 수정
         Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 존재하지 않습니다. roadmapId=" + roadmapId));
 
         roadmap.update(dto.getTitle(), dto.getContent());
+
+        // 성공하면 success를 true로 설정하여 리턴
+        resultResponse.setSuccess(true);
+
+        return resultResponse;
     }
 
     /**
      * 글 삭제
      */
     @Transactional
-    public void delete(Long roadmapId) {
+    public RoadmapDTO.ResultResponse delete(Long roadmapId) {
+        // 수행 결과를 리턴할 RoadmapDTO.ResultResponse 선언
+        RoadmapDTO.ResultResponse resultResponse = new RoadmapDTO.ResultResponse();
+
         // 넘어온 roadmapId를 통해 해당 roadmap을 삭제
         Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 존재하지 않습니다. roadmapId=" + roadmapId));
 
         roadmapRepository.delete(roadmap);
+
+        // 성공하면 success를 true로 설정하여 리턴
+        resultResponse.setSuccess(true);
+
+        return resultResponse;
     }
 
     /**
