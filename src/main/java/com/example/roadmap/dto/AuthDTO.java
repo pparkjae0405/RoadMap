@@ -88,7 +88,7 @@ public class AuthDTO {
     @NoArgsConstructor
     @Builder
     public static class LoginResponse {
-        private boolean loginSuccess;
+        private boolean success;
         private UserDTO.Response userResponse;
     }
 
