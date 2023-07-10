@@ -159,6 +159,7 @@ public class RoadmapDTO {
     @RequiredArgsConstructor
     public static class MainRecentResponse{
         private Long roadmapId;
+        private String nickName;
         private String date;
         private int view;
         private String title;
@@ -166,6 +167,7 @@ public class RoadmapDTO {
 
         public MainRecentResponse(Roadmap roadmap){
             this.roadmapId = roadmap.getRoadmapId();
+            this.nickName = roadmap.getUser().getNickName();
             this.date = roadmap.getDate();
             this.view = roadmap.getView();
             this.title = roadmap.getTitle();
