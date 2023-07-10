@@ -74,12 +74,20 @@ public class RoadmapService {
      * 글 수정
      */
     @Transactional
-    public void update(Long roadmapId, RoadmapDTO.Request dto) {
+    public RoadmapDTO.ResultResponse update(Long roadmapId, RoadmapDTO.Request dto) {
+        // 수행 결과를 리턴할 RoadmapDTO.ResultResponse 선언
+        RoadmapDTO.ResultResponse resultResponse = new RoadmapDTO.ResultResponse();
+
         // 넘어온 roadmapId와 dto를 통해 해당 roadmap의 title과 content를 수정
         Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 존재하지 않습니다. roadmapId=" + roadmapId));
 
         roadmap.update(dto.getTitle(), dto.getContent());
+
+        // 성공하면 success를 true로 설정하여 리턴
+        resultResponse.setSuccess(true);
+
+        return resultResponse;
     }
 
     /**
