@@ -28,8 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         // 1. Request Header 에서 JWT 토큰 추출
-        // String jwt = resolveToken(request); -> ("Bearer Token" 형태일 경우 사용)
-        String jwt = request.getHeader(AUTHORIZATION_HEADER);
+        String jwt = resolveToken(request);
 
         /// 2. validateToken 메서드로 토큰의 유효성을 검사
         // 정상 토큰이면 해당 토큰이 authentication 을 뱉으므로 이걸 가져와서 SecurityContext 에 저장
@@ -41,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    // Request Header 에서 토큰 정보 추출 -> ("Bearer Token" 형태일 경우 사용)
+    // Request Header 에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {

@@ -41,11 +41,13 @@ public class UserDTO {
     @Getter
     @RequiredArgsConstructor
     public static class Response {
+        private Long userId;
         private String nickName;
         private String email;
         private String major;
 
         public Response(User user){
+            this.userId = user.getUserId();
             this.nickName = user.getNickName();
             this.email = user.getEmail();
             this.major = user.getMajor();

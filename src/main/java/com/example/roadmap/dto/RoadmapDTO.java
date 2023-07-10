@@ -45,6 +45,7 @@ public class RoadmapDTO {
     @RequiredArgsConstructor
     public static class Response{
         private Long roadmapId;
+        private Long userId;
         private String nickName;
         private String date;
         private int view;
@@ -57,6 +58,7 @@ public class RoadmapDTO {
         /* Entity -> Dto*/
         public Response(Roadmap roadmap) {
             this.roadmapId = roadmap.getRoadmapId();
+            this.userId = roadmap.getUser().getUserId();
             this.nickName = roadmap.getUser().getNickName();
             this.date = roadmap.getDate();
             this.view = roadmap.getView();
