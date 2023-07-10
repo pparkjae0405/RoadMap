@@ -21,7 +21,10 @@ public class TagService {
      * 태그 작성
      */
     @Transactional
-    public Long save(Long roadmapId, List<TagDTO.Request> dto) {
+    public TagDTO.ResultResponse save(Long roadmapId, List<TagDTO.Request> dto) {
+        // 수행 결과를 리턴할 TagDTO.ResultResponse 선언
+        TagDTO.ResultResponse resultResponse = new TagDTO.ResultResponse();
+
         // 넘어온 roadmapId를 통해 roadmap을 불러오고
         Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow(() ->
                 new IllegalArgumentException("태그 쓰기 실패: 해당 게시글이 존재하지 않습니다. " + roadmapId));
@@ -39,8 +42,10 @@ public class TagService {
             tagRepository.save(tag);
         }
 
-        // 태그를 전부 저장했다면 태그를 저장한 글 번호를 리턴
-        return roadmap.getRoadmapId();
+        // 태그를 전부 저장했다면 success를 true로 설정하여 리턴
+        resultResponse.setSuccess(true);
+
+        return resultResponse;
     }
 
     /**
