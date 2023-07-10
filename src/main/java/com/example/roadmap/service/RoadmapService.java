@@ -3,7 +3,6 @@ package com.example.roadmap.service;
 import com.example.roadmap.config.exception.CEmailLoginFailedException;
 import com.example.roadmap.domain.Roadmap;
 import com.example.roadmap.dto.RoadmapDTO;
-import com.example.roadmap.dto.UserDTO;
 import com.example.roadmap.repository.RoadmapRepository;
 import com.example.roadmap.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,10 @@ public class RoadmapService {
      * 글 작성
      */
     @Transactional
-    public Long save(RoadmapDTO.Request dto) {
+    public RoadmapDTO.ResultResponse save(RoadmapDTO.Request dto) {
+        // 수행 결과를 리턴할 RoadmapDTO.ResultResponse 선언
+        RoadmapDTO.ResultResponse resultResponse = new RoadmapDTO.ResultResponse();
+
         // 현재 사용자의 인증 정보를 가져와
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -46,7 +48,10 @@ public class RoadmapService {
         Roadmap roadmap = dto.toEntity();
         roadmapRepository.save(roadmap);
 
-        return roadmap.getRoadmapId();
+        // 성공하면 success를 true로 설정하여 리턴
+        resultResponse.setSuccess(true);
+
+        return resultResponse;
     }
 
     /**
