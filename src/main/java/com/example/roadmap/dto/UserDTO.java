@@ -51,4 +51,15 @@ public class UserDTO {
             this.major = user.getMajor();
         }
     }
+
+    /**
+     * 기본 수행 결과를 리턴할 응답(Response) 클래스
+     */
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResultResponse {
+        private boolean success;
+    }
 }
