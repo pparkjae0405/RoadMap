@@ -52,7 +52,10 @@ public class InfoService {
      * 로드맵 삭제
      */
     @Transactional
-    public void delete(Long roadmapId) {
+    public InfoDTO.ResultResponse delete(Long roadmapId) {
+        // 수행 결과를 리턴할 InfoDTO.ResultResponse 선언
+        InfoDTO.ResultResponse resultResponse = new InfoDTO.ResultResponse();
+
         // findByRoadmap_RoadmapId를 호출하여 넘어온 roadmapId에 해당하는 info 리스트를 찾아
         List<Info> infos = infoRepository.findByRoadmap_RoadmapId(roadmapId);
 
@@ -60,5 +63,10 @@ public class InfoService {
         for(int i = 0 ; i < infos.size() ; i++){
             infoRepository.delete(infos.get(i));
         }
+
+        // 로드맵을 전부 삭제했다면 success를 true로 설정하여 리턴
+        resultResponse.setSuccess(true);
+
+        return resultResponse;
     }
 }
