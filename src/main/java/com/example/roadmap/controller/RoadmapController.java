@@ -40,8 +40,7 @@ public class RoadmapController {
      */
     @DeleteMapping(value = "/tour/{roadmapId}")
     public ResponseEntity delete(@PathVariable Long roadmapId) {
-        roadmapService.delete(roadmapId);
-        return ResponseEntity.ok(roadmapId);
+        return ResponseEntity.ok(roadmapService.delete(roadmapId));
     }
 
     /**

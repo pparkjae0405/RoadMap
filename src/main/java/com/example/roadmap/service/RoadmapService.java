@@ -94,12 +94,20 @@ public class RoadmapService {
      * 글 삭제
      */
     @Transactional
-    public void delete(Long roadmapId) {
+    public RoadmapDTO.ResultResponse delete(Long roadmapId) {
+        // 수행 결과를 리턴할 RoadmapDTO.ResultResponse 선언
+        RoadmapDTO.ResultResponse resultResponse = new RoadmapDTO.ResultResponse();
+
         // 넘어온 roadmapId를 통해 해당 roadmap을 삭제
         Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글이 존재하지 않습니다. roadmapId=" + roadmapId));
 
         roadmapRepository.delete(roadmap);
+
+        // 성공하면 success를 true로 설정하여 리턴
+        resultResponse.setSuccess(true);
+
+        return resultResponse;
     }
 
     /**
