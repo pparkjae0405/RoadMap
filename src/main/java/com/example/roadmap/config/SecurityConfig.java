@@ -1,6 +1,7 @@
 package com.example.roadmap.config;
 
 import com.example.roadmap.config.jwt.JwtAuthenticationFilter;
+import com.example.roadmap.config.jwt.JwtExceptionFilter;
 import com.example.roadmap.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,7 +44,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated() // 이외의 요청은 인증되어야 함
 
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, new JwtAuthenticationFilter(jwtTokenProvider).getClass());
         return http.build();
     }
 

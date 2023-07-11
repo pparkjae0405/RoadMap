@@ -95,15 +95,18 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("JWT 서명의 형식이 잘못되었습니다.");
+            // log.info("JWT 서명의 형식이 잘못되었습니다.");
+            throw new JwtException("JWT 서명의 형식이 잘못되었습니다.");
         } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 입니다.");
+            // log.info("만료된 JWT 입니다.");
+            throw new JwtException("만료된 JWT 입니다.");
         } catch (UnsupportedJwtException e) {
-            log.info("지원하지 않는 JWT 입니다.");
+            // log.info("지원하지 않는 JWT 입니다.");
+            throw new JwtException("지원하지 않는 JWT 입니다.");
         } catch (IllegalArgumentException e) {
-            log.info("잘못된 JWT 입니다.");
+            // log.info("잘못된 JWT 입니다.");
+            throw new JwtException("잘못된 JWT 입니다.");
         }
-        return false;
     }
 
     private Claims parseClaims(String accessToken) {
