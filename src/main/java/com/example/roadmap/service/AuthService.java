@@ -10,6 +10,7 @@ import com.example.roadmap.repository.RefreshTokenRepository;
 import com.example.roadmap.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -113,7 +114,7 @@ public class AuthService {
     /**
      * 회원가입 유무를 판별할 메소드
      */
-    public ResponseEntity<AuthDTO.LoginResponse> kakaoLogin(String kakaoAccessToken) {
+    public ResponseEntity<AuthDTO.LoginResponse> kakaoLogin(String kakaoAccessToken, HttpServletResponse response) {
         // kakaoAccessToken 으로 카카오 회원정보를 받아오고
         AuthDTO.KakaoAccountResponse kakaoAccountResponse = getKakaoInfo(kakaoAccessToken);
 
@@ -130,7 +131,9 @@ public class AuthService {
             UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(email)
                     .orElseThrow(CEmailLoginFailedException::new));
             loginResponse.setUserResponse(userResponse);
-            HttpHeaders headers = setTokenHeaders(tokenDto);
+
+            // 토큰을 발급하고 쿠키와 헤더에 배치
+            HttpHeaders headers = setTokenHeaders(tokenDto, response);
             return ResponseEntity.ok().headers(headers).body(loginResponse);
         } catch(CEmailLoginFailedException e) {
             // 로그인 실패(비회원)
@@ -218,7 +221,7 @@ public class AuthService {
     /**
      * 회원가입 유무를 판별할 메소드
      */
-    public ResponseEntity<AuthDTO.LoginResponse> naverLogin(String naverAccessToken) {
+    public ResponseEntity<AuthDTO.LoginResponse> naverLogin(String naverAccessToken, HttpServletResponse response) {
         // naverAccessToken 으로 네이버 회원정보를 받아오고
         AuthDTO.NaverAccountResponse naverAccountResponse = getNaverInfo(naverAccessToken);
 
@@ -235,7 +238,9 @@ public class AuthService {
             UserDTO.Response userResponse = new UserDTO.Response(userRepository.findByEmail(email)
                     .orElseThrow(CEmailLoginFailedException::new));
             loginResponse.setUserResponse(userResponse);
-            HttpHeaders headers = setTokenHeaders(tokenDto);
+
+            // 토큰을 발급하고 쿠키와 헤더에 배치
+            HttpHeaders headers = setTokenHeaders(tokenDto, response);
             return ResponseEntity.ok().headers(headers).body(loginResponse);
         } catch(CEmailLoginFailedException e) {
             // 로그인 실패(비회원)
@@ -252,9 +257,9 @@ public class AuthService {
     }
 
     /**
-     * 토큰을 헤더에 배치
+     * 토큰을 쿠키와 헤더에 배치
      */
-    public HttpHeaders setTokenHeaders(TokenDTO.Request tokenDto) {
+    public HttpHeaders setTokenHeaders(TokenDTO.Request tokenDto, HttpServletResponse response) {
         HttpHeaders headers = new HttpHeaders();
         ResponseCookie cookie = ResponseCookie.from("RefreshToken", tokenDto.getRefreshToken())
                 .path("/")
@@ -263,7 +268,7 @@ public class AuthService {
                 .sameSite("None")
                 .httpOnly(true)
                 .build();
-        headers.add("Set-cookie", cookie.toString());
+        response.setHeader("Set-cookie", cookie.toString());
         headers.add("Authorization", tokenDto.getAccessToken());
 
         return headers;
@@ -272,13 +277,15 @@ public class AuthService {
     /**
      * 소셜 로그인
      */
-    public ResponseEntity<AuthDTO.LoginResponse> socialLogin(String registrationId, String code){
+    public ResponseEntity<AuthDTO.LoginResponse> socialLogin(String registrationId,
+                                                             String code,
+                                                             HttpServletResponse response){
         if(registrationId.equals("kakao")) {
             String kakaoAccessToken = getKakaoAccessToken(code).getAccess_token();
-            return kakaoLogin(kakaoAccessToken);
+            return kakaoLogin(kakaoAccessToken, response);
         }else {
             String naverAccessToken = getNaverAccessToken(code).getAccess_token();
-            return naverLogin(naverAccessToken);
+            return naverLogin(naverAccessToken, response);
         }
     }
 
@@ -297,15 +304,15 @@ public class AuthService {
     /**
      * 회원 가입
      */
-    public ResponseEntity<AuthDTO.SignupResponse> save(UserDTO.Request dto) {
+    public ResponseEntity<AuthDTO.SignupResponse> save(UserDTO.Request dto, HttpServletResponse response) {
         // 넘어온 dto를 엔티티로 바꿔 User에 저장
         User user = dto.toEntity();
         userRepository.save(user);
 
-        // 회원가입 상황에 대해 토큰을 발급하고 헤더와 쿠키에 배치
+        // 회원가입 상황에 대해 토큰을 발급하고 쿠키와 헤더에 배치
         TokenDTO.Request tokenDto = securityService.signup(dto);
         saveRefreshToken(user, tokenDto);
-        HttpHeaders headers = setTokenHeaders(tokenDto);
+        HttpHeaders headers = setTokenHeaders(tokenDto, response);
 
         // 응답 작성
         AuthDTO.SignupResponse responseDto = new AuthDTO.SignupResponse();
@@ -315,5 +322,35 @@ public class AuthService {
         responseDto.setUserResponse(userResponse);
         responseDto.setSuccess(true);
         return ResponseEntity.ok().headers(headers).body(responseDto);
+    }
+
+    public ResponseEntity<AuthDTO.ReissueTokenResponse> reissueToken(String token) {
+        // 받아온 refreshtoken에서 token만 분리한다.
+        String value = token.substring(13);
+
+        // 응답 작성
+        AuthDTO.ReissueTokenResponse reissueTokenResponse = new AuthDTO.ReissueTokenResponse();
+
+        // 해당 refreshtoken이 유효한지, DB에 존재하는지 확인하여
+        if(securityService.validateRefreshToken(value) && securityService.existsRefreshToken(value)) {
+            // 유효하고 존재한다면 true +
+            reissueTokenResponse.setSuccess(true);
+
+            // 해당 refreshToken의 key(userId)에 해당하는 유저의 이메일을 받아와
+            RefreshToken refreshToken = tokenRepository.findByToken(value);
+            Long userId = refreshToken.getKey();
+            User user = userRepository.findByUserId(userId);
+            String email = user.getEmail();
+
+            // access token을 재발급하여 header에 추가하고 리턴
+            TokenDTO.ReissueTokenRequest tokenDto = securityService.reissueToken(email);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", tokenDto.getAccessToken());
+            return ResponseEntity.ok().headers(headers).body(reissueTokenResponse);
+        } else {
+            // 만료되었다면 false 리턴
+            reissueTokenResponse.setSuccess(false);
+            return ResponseEntity.ok(reissueTokenResponse);
+        }
     }
 }

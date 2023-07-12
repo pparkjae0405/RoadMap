@@ -51,4 +51,25 @@ public class SecurityService {
         // 토큰 발행
         return jwtTokenProvider.generateToken(userRequest.getEmail());
     }
+
+    /**
+     * Refresh Token의 유효성을 검증하는 메소드
+     */
+    public boolean validateRefreshToken(String refreshToken) {
+        return jwtTokenProvider.validateRefreshToken(refreshToken);
+    }
+
+    /**
+     * Refresh Token의 존재유무를 검증하는 메소드
+     */
+    public boolean existsRefreshToken(String refreshToken) {
+        return tokenRepository.existsByToken(refreshToken);
+    }
+
+    /**
+     * Access Token을 재발급하는 메소드
+     */
+    public TokenDTO.ReissueTokenRequest reissueToken(String email) {
+        return jwtTokenProvider.generateAccessToken(email);
+    }
 }

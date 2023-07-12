@@ -2,6 +2,7 @@ package com.example.roadmap.controller;
 
 import com.example.roadmap.dto.UserDTO;
 import com.example.roadmap.service.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +17,25 @@ public class AuthController {
      */
     @GetMapping(value = "/login/oauth2/code/{registrationId}")
     public ResponseEntity socialLogin(@PathVariable String registrationId,
-                                    @RequestParam("code") String code) {
-        return ResponseEntity.ok(authService.socialLogin(registrationId, code));
+                                    @RequestParam("code") String code,
+                                      HttpServletResponse response) {
+        return ResponseEntity.ok(authService.socialLogin(registrationId, code, response));
     }
 
     /**
      * 회원 가입 ( POST /signup )
      */
     @PostMapping(value = "/signup")
-    public ResponseEntity save(@RequestBody UserDTO.Request dto) {
-        return ResponseEntity.ok(authService.save(dto));
+    public ResponseEntity save(@RequestBody UserDTO.Request dto,
+                               HttpServletResponse response) {
+        return ResponseEntity.ok(authService.save(dto, response));
+    }
+
+    /**
+     * 토큰 재발급 ( GET /reissue )
+     */
+    @GetMapping(value = "/reissue")
+    public ResponseEntity reissueToken(@RequestHeader(value = "cookie") String refreshToken) {
+        return ResponseEntity.ok(authService.reissueToken(refreshToken));
     }
 }
