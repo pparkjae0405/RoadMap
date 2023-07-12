@@ -39,7 +39,7 @@ public class SecurityConfig {
                 // 접근 권한 설정부
                 .and().authorizeRequests()
                 .requestMatchers(HttpMethod.GET, "/", "/tour/**", "/main/**").permitAll() // tour, main uri get요청 허용
-                .requestMatchers("/login/**", "/signup").permitAll() // login, signup uri 접근 허용
+                .requestMatchers("/login/**", "/signup", "/reissue").permitAll() // login, signup uri 접근 허용
                 .requestMatchers("/user/**").hasRole("USER") // 해당 uri는 USER 역할이여야 함
                 .anyRequest().authenticated() // 이외의 요청은 인증되어야 함
 

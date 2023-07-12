@@ -66,6 +66,24 @@ public class JwtTokenProvider {
                 .build();
     }
 
+    // AccessToken을 재발급하는 메서드
+    public TokenDTO.ReissueTokenRequest generateAccessToken(String email) {
+        long now = (new Date()).getTime();
+
+        // Access Token 생성
+        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        String accessToken = Jwts.builder()
+                .setSubject(email)
+                .claim(AUTHORITIES_KEY, Authority.ROLE_USER)
+                .setExpiration(accessTokenExpiresIn)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+
+        return TokenDTO.ReissueTokenRequest.builder()
+                .accessToken(accessToken)
+                .build();
+    }
+
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
         // 토큰 복호화
@@ -107,6 +125,26 @@ public class JwtTokenProvider {
             // log.info("잘못된 JWT 입니다.");
             throw new JwtException("잘못된 JWT 입니다.");
         }
+    }
+
+    // refresh token의 유효성을 검증하는 메서드
+    public boolean validateRefreshToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("JWT 서명의 형식이 잘못되었습니다.");
+        } catch (ExpiredJwtException e) {
+            log.info("만료된 JWT 입니다.");
+        } catch (UnsupportedJwtException e) {
+            log.info("지원하지 않는 JWT 입니다.");
+        } catch (IllegalArgumentException e) {
+            log.info("잘못된 JWT 입니다.");
+        }
+        return false;
     }
 
     private Claims parseClaims(String accessToken) {

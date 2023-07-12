@@ -103,4 +103,15 @@ public class AuthDTO {
         private boolean success;
         private UserDTO.Response userResponse;
     }
+
+    /**
+     * 토큰 재발급 결과를 리턴할 응답(Response) 클래스
+     */
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ReissueTokenResponse {
+        private boolean success;
+    }
 }

@@ -30,4 +30,12 @@ public class AuthController {
                                HttpServletResponse response) {
         return ResponseEntity.ok(authService.save(dto, response));
     }
+
+    /**
+     * 토큰 재발급 ( GET /reissue )
+     */
+    @GetMapping(value = "/reissue")
+    public ResponseEntity reissueToken(@RequestHeader(value = "cookie") String refreshToken) {
+        return ResponseEntity.ok(authService.reissueToken(refreshToken));
+    }
 }

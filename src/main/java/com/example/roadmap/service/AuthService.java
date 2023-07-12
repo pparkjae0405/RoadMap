@@ -323,4 +323,34 @@ public class AuthService {
         responseDto.setSuccess(true);
         return ResponseEntity.ok().headers(headers).body(responseDto);
     }
+
+    public ResponseEntity<AuthDTO.ReissueTokenResponse> reissueToken(String token) {
+        // 받아온 refreshtoken에서 token만 분리한다.
+        String value = token.substring(13);
+
+        // 응답 작성
+        AuthDTO.ReissueTokenResponse reissueTokenResponse = new AuthDTO.ReissueTokenResponse();
+
+        // 해당 refreshtoken이 유효한지, DB에 존재하는지 확인하여
+        if(securityService.validateRefreshToken(value) && securityService.existsRefreshToken(value)) {
+            // 유효하고 존재한다면 true +
+            reissueTokenResponse.setSuccess(true);
+
+            // 해당 refreshToken의 key(userId)에 해당하는 유저의 이메일을 받아와
+            RefreshToken refreshToken = tokenRepository.findByToken(value);
+            Long userId = refreshToken.getKey();
+            User user = userRepository.findByUserId(userId);
+            String email = user.getEmail();
+
+            // access token을 재발급하여 header에 추가하고 리턴
+            TokenDTO.ReissueTokenRequest tokenDto = securityService.reissueToken(email);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", tokenDto.getAccessToken());
+            return ResponseEntity.ok().headers(headers).body(reissueTokenResponse);
+        } else {
+            // 만료되었다면 false 리턴
+            reissueTokenResponse.setSuccess(false);
+            return ResponseEntity.ok(reissueTokenResponse);
+        }
+    }
 }
