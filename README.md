@@ -4,7 +4,7 @@
 <br>
 
 ## 📆 개발 기간
-  - 2023.04 ~ 
+  - 2023.04 ~ 2023.07
 
 
 <br>
@@ -14,8 +14,8 @@
     - React, React-query, TypeScript
     
   - Back End - [`박재민`](https://github.com/pparkjae0405), [`신성철`](https://github.com/ShinSeongCheol)
-    - Java 17 
-    - SpringBoot 3.0.6, Spring Data JPA, Spring Security, MySQL
+    - Java 17, SpringBoot 3.0.6, MySQL
+    - Spring Data JPA, Spring Security, JJWT
 
 <br>
 
