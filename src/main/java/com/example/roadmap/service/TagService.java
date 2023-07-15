@@ -18,7 +18,7 @@ public class TagService {
     private final RoadmapRepository roadmapRepository;
 
     /**
-     * 태그 작성
+     * 태그 쓰기
      */
     @Transactional
     public TagDTO.ResultResponse save(Long roadmapId, List<TagDTO.Request> dto) {
