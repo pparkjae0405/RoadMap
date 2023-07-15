@@ -35,7 +35,7 @@ public class AuthController {
      * 토큰 재발급 ( GET /reissue )
      */
     @GetMapping(value = "/reissue")
-    public ResponseEntity reissueToken(@RequestHeader(value = "cookie") String refreshToken) {
+    public ResponseEntity reissueToken(@CookieValue(value = "RefreshToken") String refreshToken) {
         return ResponseEntity.ok(authService.reissueToken(refreshToken));
     }
 }
