@@ -235,4 +235,16 @@ public class RoadmapDTO {
     public static class ResultResponse {
         private boolean success;
     }
+
+    /**
+     * 글 쓰기 수행 결과를 리턴할 응답(Response) 클래스
+     */
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class WriteResponse {
+        private boolean success;
+        private Long roadmapId;
+    }
 }

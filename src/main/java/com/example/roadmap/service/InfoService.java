@@ -18,7 +18,7 @@ public class InfoService {
     private final RoadmapRepository roadmapRepository;
 
     /**
-     * 로드맵 작성
+     * 로드맵 쓰기
      */
     @Transactional
     public InfoDTO.ResultResponse save(Long roadmapId, List<InfoDTO.Request> dto) {

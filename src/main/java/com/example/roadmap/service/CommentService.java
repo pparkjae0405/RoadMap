@@ -21,7 +21,7 @@ public class CommentService {
     private final UserRepository userRepository;
 
     /**
-     * 댓글 작성
+     * 댓글 쓰기
      */
     @Transactional
     public CommentDTO.ResultResponse save(Long roadmapId, CommentDTO.Request dto) {

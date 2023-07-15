@@ -23,12 +23,12 @@ public class RoadmapService {
     private final UserRepository userRepository;
 
     /**
-     * 글 작성
+     * 글 쓰기
      */
     @Transactional
-    public RoadmapDTO.ResultResponse save(RoadmapDTO.Request dto) {
-        // 수행 결과를 리턴할 RoadmapDTO.ResultResponse 선언
-        RoadmapDTO.ResultResponse resultResponse = new RoadmapDTO.ResultResponse();
+    public RoadmapDTO.WriteResponse save(RoadmapDTO.Request dto) {
+        // 수행 결과를 리턴할 RoadmapDTO.WriteResponse 선언
+        RoadmapDTO.WriteResponse resultResponse = new RoadmapDTO.WriteResponse();
 
         // 현재 사용자의 인증 정보를 가져와
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -48,8 +48,9 @@ public class RoadmapService {
         Roadmap roadmap = dto.toEntity();
         roadmapRepository.save(roadmap);
 
-        // 성공하면 success를 true로 설정하여 리턴
+        // 성공하면 success를 true로, roadmapId를 설정하여 리턴
         resultResponse.setSuccess(true);
+        resultResponse.setRoadmapId(roadmap.getRoadmapId());
 
         return resultResponse;
     }
